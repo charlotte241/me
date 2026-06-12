@@ -24,7 +24,7 @@ const App = (() => {
   /* ─── NAVIGATION ─────────────────────────────────────── */
   function navigate(view) {
     currentView = view;
-    document.querySelectorAll('.nav-item').forEach(el => {
+    document.querySelectorAll('#main-nav .nav-item').forEach(el => {
       el.classList.toggle('active', el.dataset.view === view);
     });
     renderView();
@@ -58,6 +58,8 @@ const App = (() => {
       case 'scale':    renderScale(el); break;
       case 'insights': renderInsights(el); break;
       case 'week':     renderWeek(el); break;
+      case 'history':  renderHistory(el); break;
+      case 'settings': renderSettings(el); break;
     }
     updateHeader();
     bindViewEvents();
@@ -264,11 +266,11 @@ const App = (() => {
 
     <div style="display:flex;gap:16px;margin-bottom:20px">
       <div class="card-sm" style="flex:1;text-align:center">
-        <div style="font-family:var(--font-serif);font-size:24px;color:var(--ivory)">${totalCal || '—'}</div>
+        <div id="log-total-cal" style="font-family:var(--font-serif);font-size:24px;color:var(--ivory)">${totalCal || '—'}</div>
         <div style="font-size:10px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase">Total kcal</div>
       </div>
       <div class="card-sm" style="flex:1;text-align:center">
-        <div style="font-family:var(--font-serif);font-size:24px;color:var(--ivory)">${totalProt || '—'}<span style="font-size:14px">g</span></div>
+        <div id="log-total-prot" style="font-family:var(--font-serif);font-size:24px;color:var(--ivory)">${totalProt || '—'}${totalProt ? '<span style="font-size:14px">g</span>' : ''}</div>
         <div style="font-size:10px;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase">Total protein</div>
       </div>
     </div>
@@ -945,6 +947,28 @@ const App = (() => {
       saveScaleBtn.addEventListener('click', () => saveScaleEntry());
     }
 
+    /* ── Save settings ────────────────────────────────── */
+    const saveSettingsBtn = document.getElementById('save-settings-btn');
+    if (saveSettingsBtn) {
+      saveSettingsBtn.addEventListener('click', () => {
+        const intVal = id => { const v = parseInt(document.getElementById(id).value); return isNaN(v) ? null : v; };
+        const fltVal = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) ? null : v; };
+        const data = {
+          calorieTarget: intVal('s-calories'),
+          proteinTarget: intVal('s-protein'),
+          waterTarget:   fltVal('s-water'),
+          stepsTarget:   intVal('s-steps'),
+          cycleLengthDays: intVal('s-cycle')
+        };
+        if (!data.calorieTarget || !data.proteinTarget || !data.waterTarget) {
+          showToast('Fill in all targets'); return;
+        }
+        Storage.saveSettings(data);
+        showToast('Settings saved');
+        updateHeader();
+      });
+    }
+
     /* ── Insight tab filtering ────────────────────────── */
     const insightTabs = document.getElementById('insight-tabs');
     if (insightTabs) {
@@ -976,24 +1000,144 @@ const App = (() => {
         <button class="meal-remove" data-meal-idx="${i}">×</button>
       </div>`).join('') : '<div style="font-size:12px;color:var(--text-4);padding:8px 0">No meals logged yet</div>';
 
-    const mealListEl = document.getElementById('meal-list');
-    if (mealListEl) {
-      mealListEl.addEventListener('click', e => {
-        const btn = e.target.closest('.meal-remove');
-        if (btn) {
-          const idx = parseInt(btn.dataset.mealIdx);
-          mealList.splice(idx, 1);
-          renderMealList();
-        }
-      });
+    const calEl = document.getElementById('log-total-cal');
+    const protEl = document.getElementById('log-total-prot');
+    if (calEl) calEl.textContent = totalCal || '—';
+    if (protEl) protEl.innerHTML = (totalProt || '—') + (totalProt ? '<span style="font-size:14px">g</span>' : '');
+  }
+
+  /* ─── HISTORY VIEW ───────────────────────────────────── */
+  function renderHistory(el) {
+    const allDates = Storage.getAllDailyDates();
+    const settings = Storage.getSettings();
+
+    let html = `
+    <div class="view-title">History</div>
+    <div class="view-subtitle">All logged days</div>`;
+
+    if (allDates.length === 0) {
+      html += `<div class="no-data-card" style="margin-top:20px">
+        <div class="no-data-title">Nothing logged yet</div>
+        <div class="no-data-body">Your daily logs will appear here once you start logging.</div>
+      </div>`;
+      el.innerHTML = html;
+      return;
     }
 
-    const calDisplay = document.querySelector('.metrics-grid .metric-value');
-    const totals = document.querySelectorAll('.card-sm .metric-value, .card-sm > div:first-child');
-    totals.forEach((el, i) => {
-      if (i === 0) el.textContent = totalCal || '—';
-      if (i === 2) el.textContent = (totalProt || '—') + (totalProt ? 'g' : '');
+    /* Group by month */
+    const byMonth = {};
+    allDates.forEach(date => {
+      const month = date.slice(0, 7);
+      if (!byMonth[month]) byMonth[month] = [];
+      byMonth[month].push(date);
     });
+
+    Object.keys(byMonth).sort().reverse().forEach(month => {
+      const [year, mon] = month.split('-');
+      const monthLabel = new Date(parseInt(year), parseInt(mon) - 1, 1)
+        .toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+      html += `<div class="section-label">${monthLabel}</div><div class="card">`;
+
+      byMonth[month].forEach(date => {
+        const entry = Storage.getDaily(date);
+        const score = Storage.calcGlowScore(entry, settings);
+        const scaleEntry = Storage.getScale(date);
+        const isToday = date === Storage.today();
+
+        const parts = [];
+        if (entry.calories) parts.push(entry.calories + ' kcal');
+        if (entry.protein) parts.push(entry.protein + 'g prot');
+        if (entry.water) parts.push(entry.water + 'L');
+        if (entry.workoutType && entry.workoutType !== 'rest') parts.push(entry.workoutType);
+
+        const chips = [];
+        if (scaleEntry && scaleEntry.weight) chips.push(`<span class="history-chip" style="border-color:var(--gold-dim);color:var(--gold)">${scaleEntry.weight}kg</span>`);
+        if (entry.cyclePMS)  chips.push(`<span class="history-chip" style="border-color:var(--mauve);color:var(--mauve)">PMS</span>`);
+        if (entry.cyclePeriod) chips.push(`<span class="history-chip" style="border-color:var(--mauve);color:var(--mauve)">Period</span>`);
+        if (entry.gutSeverity && entry.gutSeverity !== 'none') chips.push(`<span class="history-chip" style="border-color:var(--amber);color:var(--amber)">gut</span>`);
+        if (entry.workoutIntensity === 'hard') chips.push(`<span class="history-chip" style="border-color:var(--sage);color:var(--sage)">hard session</span>`);
+
+        html += `<div class="history-item" data-date="${date}" style="cursor:pointer">
+          <div class="history-date">${Storage.formatDay(date)}${isToday ? '<div style="font-size:9px;color:var(--gold);letter-spacing:.08em;text-transform:uppercase;margin-top:2px">Today</div>' : ''}</div>
+          <div class="history-summary">
+            ${parts.join(' · ') || '<span style="color:var(--text-4)">Partial log</span>'}
+            ${chips.length ? `<div class="history-chips" style="margin-top:5px">${chips.join('')}</div>` : ''}
+          </div>
+          <div style="font-family:var(--font-serif);font-size:20px;color:${score > 70 ? 'var(--gold)' : score > 40 ? 'var(--ivory-muted)' : 'var(--text-3)'};flex-shrink:0;min-width:28px;text-align:right">${score || '—'}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+
+    el.innerHTML = html;
+
+    el.querySelectorAll('.history-item').forEach(item => {
+      item.addEventListener('click', () => {
+        logDate = item.dataset.date;
+        navigate('log');
+      });
+    });
+  }
+
+  /* ─── SETTINGS VIEW ───────────────────────────────────── */
+  function renderSettings(el) {
+    const s = Storage.getSettings();
+    const daysLogged = Storage.getAllDailyDates().length;
+    const scaleLogged = Storage.getAllScaleDates().length;
+
+    let html = `
+    <div class="view-title">Settings</div>
+    <div class="view-subtitle">Your personal targets</div>
+
+    <div class="section-label">Daily targets</div>
+    <div class="card">
+      <div class="form-row-inline">
+        <div class="form-row">
+          <label>Calorie target (kcal)</label>
+          <input type="number" id="s-calories" value="${s.calorieTarget}" min="800" max="4000" step="50">
+        </div>
+        <div class="form-row">
+          <label>Protein target (g)</label>
+          <input type="number" id="s-protein" value="${s.proteinTarget}" min="40" max="300" step="5">
+        </div>
+      </div>
+      <div class="form-row-inline">
+        <div class="form-row">
+          <label>Water target (L)</label>
+          <input type="number" id="s-water" value="${s.waterTarget}" min="1" max="6" step="0.25">
+        </div>
+        <div class="form-row">
+          <label>Steps target</label>
+          <input type="number" id="s-steps" value="${s.stepsTarget}" min="1000" max="30000" step="500">
+        </div>
+      </div>
+      <div class="form-row" style="max-width:200px">
+        <label>Cycle length (days)</label>
+        <input type="number" id="s-cycle" value="${s.cycleLengthDays || 28}" min="20" max="45">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="save-settings-btn">Save targets</button>
+      </div>
+    </div>
+
+    <div class="section-label">Data</div>
+    <div class="card">
+      <div style="font-size:13px;color:var(--ivory-muted);margin-bottom:16px;line-height:1.7">
+        All data is stored locally on this device using localStorage. Nothing is sent anywhere. If you clear your browser data, logs will be lost — export functionality will be added in a future version.
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <div class="card-sm" style="text-align:center;flex:1">
+          <div style="font-family:var(--font-serif);font-size:28px;color:var(--ivory)">${daysLogged}</div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)">Days logged</div>
+        </div>
+        <div class="card-sm" style="text-align:center;flex:1">
+          <div style="font-family:var(--font-serif);font-size:28px;color:var(--ivory)">${scaleLogged}</div>
+          <div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)">Scale entries</div>
+        </div>
+      </div>
+    </div>`;
+
+    el.innerHTML = html;
   }
 
   /* ─── SAVE LOG ────────────────────────────────────────── */
@@ -1104,12 +1248,11 @@ const App = (() => {
 
   /* ─── INIT ────────────────────────────────────────────── */
   function init() {
-    /* Nav clicks */
+    /* Nav clicks (main nav + header settings button share .nav-item) */
     document.querySelectorAll('.nav-item').forEach(btn => {
       btn.addEventListener('click', () => navigate(btn.dataset.view));
     });
 
-    /* Initial render */
     navigate('today');
   }
 

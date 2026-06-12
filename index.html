@@ -14,7 +14,10 @@
     <header id="site-header">
       <div class="header-inner">
         <div class="wordmark">Body Intelligence</div>
-        <div id="header-meta" class="header-meta"></div>
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="header-settings-btn nav-item" data-view="settings" style="flex:none;padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:10px;letter-spacing:.1em">Settings</button>
+          <div id="header-meta" class="header-meta"></div>
+        </div>
       </div>
     </header>
 
@@ -25,6 +28,7 @@
         <button class="nav-item" data-view="scale">Scale</button>
         <button class="nav-item" data-view="insights">Insights</button>
         <button class="nav-item" data-view="week">Week</button>
+        <button class="nav-item" data-view="history">History</button>
       </div>
     </nav>
 
