@@ -37,14 +37,15 @@ def get(path):
 
 
 def fetch_all(path):
+    # Paginate with starting_after; the API's links.next omits the /v1 prefix
     out, url = [], f"{path}?limit=100"
     for _ in range(100):
         res = get(url)
-        out.extend(res.get("data", []))
-        nxt = (res.get("links") or {}).get("next")
-        if not nxt:
+        data = res.get("data", [])
+        out.extend(data)
+        if not data or not (res.get("links") or {}).get("next"):
             break
-        url = nxt if nxt.startswith("/") else "/" + nxt
+        url = f"{path}?limit=100&starting_after={data[-1]['id']}"
     return out
 
 
