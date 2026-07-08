@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PBW Command Centre — Oct 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" rel="stylesheet" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0a0714;color:#e8e6f0;line-height:1.5;padding:0 0 60px}
+.wrap{max-width:1150px;margin:0 auto;padding:16px}
+.gradient-text{font-size:clamp(22px,4vw,34px);font-weight:800;background:linear-gradient(90deg,#c084fc,#818cf8,#e8b84b,#c084fc);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:300% 0}}
+.sub{color:#8b87a0;font-size:12.5px;margin-top:3px}
+/* scroll-velocity marquee */
+.marquee{overflow:hidden;white-space:nowrap;border-top:1px solid #2a2440;border-bottom:1px solid #2a2440;background:#0d0918;padding:10px 0;margin:14px 0;user-select:none}
+.marquee .track{display:inline-block;will-change:transform}
+.marquee .track span{font-size:clamp(18px,3vw,28px);font-weight:800;letter-spacing:.06em;color:transparent;-webkit-text-stroke:1px #4c3f78;margin-right:38px;text-transform:uppercase}
+.marquee .track span.solid{color:#e8b84b;-webkit-text-stroke:0}
+.countdown{display:flex;gap:10px;flex-wrap:wrap}
+.cd{background:#151022;border:1px solid #2a2440;border-radius:14px;padding:10px 16px;min-width:72px;text-align:center}
+.cd .n{font-size:26px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.cd .l{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:#8b87a0}
+.card{background:#151022;border:1px solid #2a2440;border-radius:14px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(500px circle at var(--mx,50%) var(--my,50%),rgba(168,130,255,.1),transparent 45%);pointer-events:none}
+.grid{display:grid;gap:12px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:14px 0}
+.kpi .label{font-size:10.5px;text-transform:uppercase;letter-spacing:.1em;color:#8b87a0}
+.kpi .value{font-size:24px;font-weight:800;margin-top:4px;color:#fff}
+.kpi .note{font-size:11.5px;color:#8b87a0;margin-top:3px}
+.gold{color:#e8b84b!important}.green{color:#4ade80!important}.red{color:#f87171!important}.purple{color:#c084fc!important}
+h2{font-size:16px;font-weight:800;margin:24px 0 4px;color:#fff}
+h2 .accent{color:#e8b84b}
+.sect-sub{color:#8b87a0;font-size:12.5px;margin-bottom:12px}
+.tabs{display:flex;gap:7px;margin:16px 0;flex-wrap:wrap;position:sticky;top:0;background:#0a0714;padding:8px 0;z-index:5}
+.tab{padding:9px 16px;border-radius:999px;border:1px solid #2a2440;background:#151022;color:#a9a5bd;font-weight:700;font-size:12.5px;cursor:pointer;transition:all .2s}
+.tab:hover{border-color:#4c3f78}
+.tab.active{background:linear-gradient(90deg,#6d5bd0,#8b5cf6);color:#fff;border-color:transparent}
+.subtabs{display:flex;gap:6px;margin:4px 0 16px;flex-wrap:wrap}
+.subtab{padding:7px 14px;border-radius:10px;border:1px solid #2a2440;background:#100c1c;color:#a9a5bd;font-weight:700;font-size:12px;cursor:pointer}
+.subtab.active{background:#221b38;color:#e8b84b;border-color:#4c3f78}
+.view,.pview{display:none}
+.view.show,.pview.show{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:11.5px;font-weight:800}
+.b-ahead{background:#123c31;color:#4ade80}.b-behind{background:#3d1420;color:#f87171}.b-wait{background:#221b38;color:#8b87a0}.b-track{background:#3d2c12;color:#e8b84b}
+.chartbox{height:300px;position:relative}
+/* progress */
+.bigprog{height:12px;background:#221b38;border-radius:999px;overflow:hidden;margin:8px 0 4px}
+.bigprog .bar{height:100%;background:linear-gradient(90deg,#818cf8,#e8b84b);border-radius:999px;transition:width .6s cubic-bezier(.22,1,.36,1)}
+/* checklist */
+.week{margin-bottom:12px}
+.week summary{cursor:pointer;font-weight:700;font-size:13.5px;color:#fff;padding:12px 14px;background:#151022;border:1px solid #2a2440;border-radius:11px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.week summary::-webkit-details-marker{display:none}
+.week summary .wk-when{font-size:11px;color:#8b87a0;font-weight:600;white-space:nowrap}
+.week.current summary{border-color:#e8b84b;box-shadow:0 0 16px rgba(232,184,75,.15)}
+.week[open] summary{border-radius:11px 11px 0 0;border-bottom-color:transparent}
+.week .items{border:1px solid #2a2440;border-top:none;border-radius:0 0 11px 11px;padding:4px 14px 10px;background:#100c1c}
+.week.current[open] .items{border-color:#e8b84b;border-top:none}
+.task{border-bottom:1px solid #1d1730;padding:10px 0}
+.task:last-child{border-bottom:none}
+.task .row{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.task input{appearance:none;min-width:18px;height:18px;border:2px solid #4c3f78;border-radius:6px;cursor:pointer;position:relative;margin-top:1px}
+.task input:checked{background:linear-gradient(135deg,#8b5cf6,#e8b84b);border-color:transparent}
+.task input:checked::after{content:"✓";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:800}
+.task .txt{font-size:13.5px;color:#e2ddf2;font-weight:600}
+.task input:checked~div .txt{color:#5f5a75;text-decoration:line-through}
+.task .how{font-size:12.5px;color:#8b87a0;margin-top:3px}
+.task input:checked~div .how{color:#4a4560}
+.who{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;margin-left:5px;white-space:nowrap;display:inline-block}
+.who.A{background:#2b1d4d;color:#c084fc}.who.C{background:#123c31;color:#4ade80}.who.R{background:#3d2c12;color:#e8b84b}
+.due{font-size:10px;font-weight:800;padding:1px 8px;border-radius:999px;background:#3d1420;color:#f87171;margin-left:6px}
+/* channels */
+.channels{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.ch .name{font-weight:800;color:#fff;font-size:14px}
+.ch .role{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:2px 9px;border-radius:999px;margin:5px 0 6px}
+.role.new{background:#2b1d4d;color:#c084fc}.role.win{background:#3d2c12;color:#e8b84b}.role.ret{background:#123c31;color:#4ade80}
+.ch p{font-size:12.5px;color:#a9a5bd}
+.ch .rule{font-size:11.5px;color:#e8b84b;margin-top:6px}
+/* tables */
+table.dk{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:10px}
+table.dk th{text-align:right;padding:9px 10px;background:#1d1730;color:#8b87a0;font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap}
+table.dk th:first-child,table.dk th:nth-child(2){text-align:left}
+table.dk td{padding:8px 10px;border-bottom:1px solid #1d1730;color:#c9c5da;text-align:right;white-space:nowrap}
+table.dk td:first-child,table.dk td:nth-child(2){text-align:left;white-space:normal}
+table.dk tr.future td{color:#6f6a85;font-style:italic}
+table.dk tr.avg td{font-weight:800;color:#e8b84b;background:#1a1428}
+table.dk tr.hl td{background:#1a1428}
+.tablewrap{overflow-x:auto;border:1px solid #2a2440;border-radius:12px}
+code{background:#221b38;padding:2px 7px;border-radius:6px;color:#e8b84b;font-size:12px}
+a{color:#c084fc;text-decoration:none}
+#loading{text-align:center;padding:60px 0;color:#8b87a0}
+.spinner{width:26px;height:26px;border:3px solid #2a2440;border-top-color:#8b5cf6;border-radius:50%;animation:spin .9s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+#err{display:none;background:#3d1420;color:#f87171;padding:12px 16px;border-radius:10px;margin:12px 0;font-size:13px}
+/* grid.js dark */
+.gridjs-wrapper{box-shadow:none!important;border:1px solid #2a2440!important;border-radius:12px!important}
+table.gridjs-table{font-size:12.5px;background:#100c1c}
+th.gridjs-th{background:#1d1730!important;color:#8b87a0!important;border:none!important;padding:9px 11px!important}
+td.gridjs-td{background:#100c1c!important;color:#c9c5da!important;border-color:#1d1730!important;padding:8px 11px!important}
+.gridjs-search input,.gridjs-pagination button{background:#151022!important;color:#e8e6f0!important;border:1px solid #2a2440!important}
+.gridjs-pagination{color:#8b87a0!important;background:transparent!important;border:none!important}
+.gridjs-summary{color:#8b87a0!important}
+.new-tag{background:#1d2b52;color:#7ea7ff;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700}
+.ret-tag{background:#2b1d4d;color:#c084fc;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700}
+select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;background:#151022;color:#fff;font-weight:600}
+.reset{background:none;border:1px solid #2a2440;color:#5f5a75;font-size:11px;border-radius:8px;padding:5px 10px;cursor:pointer}
+.nextup{border:1px solid #e8b84b;background:linear-gradient(135deg,#1a1428,#151022)}
+</style>
+</head>
+<body>
+
+<div class="marquee" id="marquee"><div class="track" id="mtrack"></div></div>
+
+<div class="wrap">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+  <div>
+    <div class="gradient-text">PBW COMMAND CENTRE</div>
+    <div class="sub">Joint Ventures &amp; M&amp;A · Thu 1 October 2026 · Manchester · <span id="updated">connecting to Ticket Tailor…</span></div>
+  </div>
+  <div class="countdown" id="countdown"></div>
+</div>
+
+<div id="err"></div>
+<div id="loading"><div class="spinner"></div>Pulling every order &amp; ticket from Ticket Tailor…</div>
+
+<div id="app" style="display:none">
+<div class="grid kpis" id="heroKpis"></div>
+
+<div class="tabs">
+  <button class="tab active" data-v="plan">📋 Campaign Plan</button>
+  <button class="tab" data-v="pace">📈 Pace Tracker</button>
+  <button class="tab" data-v="events">🏆 All Events</button>
+  <button class="tab" data-v="attendees">👥 Attendees</button>
+  <button class="tab" data-v="log">🧾 Purchase Log</button>
+</div>
+
+<!-- PLAN -->
+<div class="view show" id="v-plan">
+  <div class="card" style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+      <b>Campaign progress</b><span class="sub" id="progTxt"></span>
+    </div>
+    <div class="bigprog"><div class="bar" id="progBar" style="width:0"></div></div>
+  </div>
+  <div class="subtabs" id="planTabs">
+    <button class="subtab active" data-pv="now">📍 This Week</button>
+    <button class="subtab" data-pv="p1">Phase 1 · →14 Aug</button>
+    <button class="subtab" data-pv="p2">Phase 2 · →18 Sep</button>
+    <button class="subtab" data-pv="p3">Phase 3 · →1 Oct</button>
+    <button class="subtab" data-pv="emails">✉️ Email Sequence</button>
+    <button class="subtab" data-pv="channels">📣 Channels</button>
+    <button class="subtab" data-pv="money">💷 Codes &amp; Budget</button>
+  </div>
+  <div class="pview show" id="pv-now"></div>
+  <div class="pview" id="pv-p1"></div>
+  <div class="pview" id="pv-p2"></div>
+  <div class="pview" id="pv-p3"></div>
+  <div class="pview" id="pv-emails">
+    <h2 style="margin-top:4px">Email Sequence <span class="accent">— the proven pattern, October-dated</span></h2>
+    <div class="sect-sub">Built from your monday.com sequence. Rule: every send lands Sunday evening or Monday 7–8am unless it's a deadline day. Benchmarks = your real April/January results.</div>
+    <div class="tablewrap"><table class="dk">
+      <thead><tr><th>Send</th><th>Audience segment</th><th>Date</th><th>Angle</th><th>Benchmark</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 · Announcement</b></td><td>Everyone (3,000)</td><td>Sun 19 Jul</td><td>Manchester + JV/M&amp;A + "before the Budget" + SEB price</td><td>~26% open</td></tr>
+        <tr><td><b>1.2 · Resend</b></td><td>Didn't open #1</td><td>Sat 25 Jul</td><td>New subject line, same body</td><td>~30% open</td></tr>
+        <tr><td><b>2 · Past attendee voucher</b></td><td>Past attendees</td><td>Sun 26 Jul</td><td><code>PBWTHANKS</code> £100 + "you know what this room is like"</td><td>33% open / 13% CTR</td></tr>
+        <tr><td><b>3 · Engaged clickers</b></td><td>Clicked any Oct mailing</td><td>Sun 2 Aug</td><td>Content: "the JV that went wrong" story</td><td class="gold"><b>77–92% open</b></td></tr>
+        <tr class="hl"><td><b>4 · SEB deadline</b></td><td>Everyone</td><td>Fri 7 Aug</td><td>Price rises Fri 14 Aug — plain and direct</td><td>deadline sends spike CTR ~7%</td></tr>
+        <tr class="hl"><td><b>5 · SEB 48h warning</b></td><td>Engaged only</td><td>Wed 12 Aug</td><td>"48 hours" + seat count</td><td>24% open / 7% CTR</td></tr>
+        <tr class="hl"><td><b>6 · SEB final hours</b></td><td>Everyone</td><td>Fri 14 Aug am</td><td>Last call, price flips at midnight</td><td>18% open / 7% CTR</td></tr>
+        <tr><td><b>7 · Missed it</b></td><td>Didn't open 4–6</td><td>Sun 23 Aug</td><td>"You missed SEB — EB still beats door price"</td><td>~40% open (resend pattern)</td></tr>
+        <tr><td><b>8 · Budget angle</b></td><td>Everyone</td><td>Sun 30 Aug</td><td>"What the November Budget could do to property owners"</td><td>~36% open</td></tr>
+        <tr><td><b>9 · Post-PDS + EB deadline</b></td><td>Everyone</td><td>Sun 13 Sep</td><td>EB ends Fri 18 + PDS momentum</td><td>—</td></tr>
+        <tr class="hl"><td><b>10 · EB 48h</b></td><td>Engaged only</td><td>Wed 16 Sep</td><td>"48 hours" + real seats left</td><td>engaged sends: 88%+ open</td></tr>
+        <tr><td><b>11 · Scarcity</b></td><td>Everyone</td><td>Sun 20 Sep</td><td>Real remaining-seats count ("X of 48")</td><td class="gold">88.7% open / 53.8% CTR (Apr)</td></tr>
+        <tr><td><b>12 · 3-push closer</b></td><td>Engaged only, Day 1/2/3</td><td>22–26 Sep</td><td>Adam's voice → cost of getting it wrong → final seats</td><td>proven Jan pattern</td></tr>
+        <tr><td><b>13 · Last chance</b></td><td>Everyone</td><td>Mon 28 + Wed 30 Sep</td><td>Genuine final call</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <div class="sect-sub" style="margin-top:10px">Adam's Gmail win-backs run alongside (8/day, hand-typed, 13–24 Jul) — they are NOT Mailchimp sends and never get a template.</div>
+  </div>
+  <div class="pview" id="pv-channels">
+    <h2 style="margin-top:4px">Channel Playbook <span class="accent">— who does what, and the hard rules</span></h2>
+    <div class="grid channels" style="margin-top:10px">
+      <div class="card ch"><div class="name">Mailchimp (3,000)</div><span class="role win">Engine · win-backs + regulars</span><p>Runs the sequence in the Emails tab. Segment religiously — engaged-clicker sends hit <b>77–92% opens</b> vs ~26% blasts. Sunday eve / Monday 7–8am always.</p><div class="rule">Never claim scarcity that isn't literally true.</div></div>
+      <div class="card ch"><div class="name">Adam — Gmail 1:1</div><span class="role win">Win-backs · 93 people</span><p>8 hand-typed/day ranked by past spend, done by 24 Jul. Plain text, one link max, reference the event they attended. No mail-merge tools — that's what Gmail's 2026 rules flag.</p><div class="rule">A reply is worth more than a click — ask a question.</div></div>
+      <div class="card ch"><div class="name">Adam — LinkedIn (7k) + Dripify</div><span class="role new">New buyers</span><p>4–5 posts/wk: Budget angle, JV war stories, Manchester. Dripify capped 20–25 requests/day (aggressive settings restrict ~1 in 3 accounts). Targets: NW investors + event-post engagers.</p><div class="rule">No pitch in message 1. Ever.</div></div>
+      <div class="card ch"><div class="name">Rod's channels (2k LI + 1k IG)</div><span class="role ret">Amplifier only</span><p>Charlotte posts on his behalf — Adam's calendar offset by one day. Zero actions required from Rod, by design.</p><div class="rule">Nothing in this plan depends on Rod doing anything.</div></div>
+      <div class="card ch"><div class="name">Roma Finance (£5k + network)</div><span class="role new">New-buyer engine</span><p>Their NW borrower/broker list is worth more than the money. Ask: one email to their list (w/c 3 Aug), one company post, PDS stand hands out <code>PDS100</code>.</p><div class="rule">Confirm their PDS plans THIS WEEK before their calendar fills.</div></div>
+      <div class="card ch"><div class="name">Propenomix Podcast</div><span class="role new">New buyers · £0</span><p>Manchester + "structure before the Budget" episode late July. Event mention every episode until October. 4–6 reels clipped per episode for all socials.</p><div class="rule">No paid promotion — cold reach doesn't convert (Jan26: 13k views, 0.23%).</div></div>
+      <div class="card ch"><div class="name">Instagram + Facebook (Adam)</div><span class="role ret">Support</span><p>Podcast reels, deadline countdowns, April testimonial quote graphics. Warms the audience; not expected to sell alone.</p></div>
+      <div class="card ch"><div class="name">WhatsApp groups</div><span class="role new">Two shots only</span><p>Post #1 w/c 27 Jul ("we're bringing it to Manchester"), post #2 PDS/EB week. PIP Manchester + northern groups first.</p><div class="rule">Never a third post. These groups are borrowed, not owned.</div></div>
+      <div class="card ch"><div class="name">Boardroom Club LinkedIn (200)</div><span class="role ret">Host</span><p>Owns the LinkedIn Event page, reposts everything, invite batches weekly.</p></div>
+    </div>
+  </div>
+  <div class="pview" id="pv-money">
+    <h2 style="margin-top:4px">Codes &amp; Tracking <span class="accent">— no more "untracked"</span></h2>
+    <div class="sect-sub">33 of the last 50 tickets had no source tag. This cycle every route in has a name — the Purchase Log tab shows what each code/tag produced, live.</div>
+    <div class="tablewrap"><table class="dk">
+      <thead><tr><th>Code / Tag</th><th>What</th><th>Who gets it</th><th>Expires</th></tr></thead>
+      <tbody>
+        <tr><td><code>PDS100</code></td><td>£100 off</td><td>PDS conversations + Roma's stand (9 Sep)</td><td>Fri 18 Sep</td></tr>
+        <tr><td><code>GUEST100</code> per-loyalist variants</td><td>£100 off for a first-timer</td><td>Guests of 3+ event loyalists</td><td>Fri 18 Sep</td></tr>
+        <tr><td><code>PBWTHANKS</code></td><td>£100 off</td><td>Past attendees via win-back emails</td><td>Event day</td></tr>
+        <tr><td>Referral tags</td><td>mailings · sundaysupplement · aldirectflw · allinkedin · romalist · dripify · podcast · event_page_widget</td><td>One per channel link</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+    <h2>Roma's £5,000</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:10px">
+      <div class="card"><div class="kpi"><div class="label">Code subsidy pool</div><div class="value gold">£1,500</div><div class="note">15 × £100 — PDS100 + guest codes. Zero setup, auto-tracked in Ticket Tailor.</div></div></div>
+      <div class="card"><div class="kpi"><div class="label">Loyalist rewards</div><div class="value gold">£300</div><div class="note">VIP lunch upgrades for loyalists whose guests book.</div></div></div>
+      <div class="card"><div class="kpi"><div class="label">Warm retargeting</div><div class="value gold">£1,000</div><div class="note">Meta ads to site visitors/engagers only, ~£20/day Sept. ONLY if someone owns pixel setup — else fold into codes.</div></div></div>
+      <div class="card nextup"><div class="kpi"><div class="label">War chest — held</div><div class="value">£2,200</div><div class="note">Deployed only if a pace checkpoint shows BEHIND, on whatever the referral tags say is working. Otherwise: profit.</div></div></div>
+    </div>
+    <div class="sub" style="margin-top:14px">Working docs: <a href="https://thesourc3.monday.com/boards/18316240249">TPBW Social Media</a> · <a href="https://thesourc3.monday.com/boards/18242090538">TPBW Newsletters</a> · Event Management v2.xlsx · <button class="reset" onclick="if(confirm('Clear all ticks?')){localStorage.removeItem('oct26cc');location.reload()}">Reset ticks</button></div>
+  </div>
+</div>
+
+<!-- PACE -->
+<div class="view" id="v-pace">
+  <div class="grid kpis" id="paceKpis"></div>
+  <h2>Sales Pace vs Past Events <span class="accent">· live</span></h2>
+  <div class="card chartbox"><canvas id="paceChart"></canvas></div>
+  <h2>Sell-out Checkpoints <span class="accent">· auto-graded from live sales</span></h2>
+  <div class="tablewrap"><table class="dk" id="chkTable">
+    <thead><tr><th>Date</th><th>Days out</th><th>Target (sell-out)</th><th>Historic avg</th><th>Actual (live)</th><th>Status</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+  <div class="sect-sub" style="margin-top:10px">Targets = 55% above the historic average curve. BEHIND at any checkpoint → unlock the £2.2k war chest and bring the next email forward.</div>
+</div>
+
+<!-- EVENTS -->
+<div class="view" id="v-events">
+  <div class="grid kpis" id="ovKpis"></div>
+  <h2>Every Event — Performance Summary <span class="accent">· live</span></h2>
+  <div class="tablewrap" id="ovTableWrap"></div>
+  <div class="sect-sub" style="margin-top:8px">Revenue = actual paid (net of vouchers &amp; refunds). Page views, costs, profit live in the Excel workbook.</div>
+  <h2>Revenue &amp; Tickets by Event</h2>
+  <div class="card chartbox"><canvas id="revChart"></canvas></div>
+</div>
+
+<!-- ATTENDEES -->
+<div class="view" id="v-attendees">
+  <h2 style="margin-top:0">Master Attendee List <span class="accent">· live, every buyer ever</span></h2>
+  <div class="sect-sub">Sort any column, search anyone. Loyalist 5+ · Regular 3–4 · Returner 2. "Booked OCT26" = already in for Manchester.</div>
+  <div id="loyalty"></div>
+</div>
+
+<!-- LOG -->
+<div class="view" id="v-log">
+  <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap">
+    <h2 style="margin:0">Purchase Log <span class="accent">· live</span></h2>
+    <select id="logSelect"></select>
+  </div>
+  <div class="sect-sub">Who bought, exactly when, what they paid, where they came from. Newest first.</div>
+  <div id="logGrid"></div>
+</div>
+</div>
+</div>
+
+<script>
+const DAY=86400,MAXD=120,VAT=1.2,CAP=48;
+const OCT='ev_8397335';
+const TOPICS={ev_3362937:'Planning',ev_3542479:'Due diligence + JV',ev_4147024:'Operating at scale',ev_4409076:'Exits',ev_4733063:'Planning + book keeping',ev_5189838:'Due diligence',ev_5949166:'Joint ventures',ev_6354453:'Operating at scale',ev_6956183:'Planning + book keeping',ev_7526379:'Exits (Manchester)',ev_8115732:'Due diligence',ev_8397335:'Joint ventures & M&A'};
+const CHECKPOINTS=[['2026-08-02',60,12],['2026-08-17',45,24],['2026-09-01',30,34],['2026-09-17',14,42],['2026-10-01',0,48]];
+const gbp=n=>'£'+Math.round(n).toLocaleString('en-GB');
+const pct=n=>(n*100).toFixed(0)+'%';
+const dt=u=>{const d=new Date(u*1000);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
+const dshort=u=>new Date(u*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+
+// ================= PLAN DATA =================
+const PLAN=[
+ {id:'p1',phase:'Phase 1 — Peak buying window',weeks:[
+  {start:'2026-07-13',label:'W/c 13 July',title:'Ignition',tasks:[
+   {k:'p1a1',who:['C'],txt:'Ticket Tailor housekeeping',how:'Verify tier prices & SEB end date (Fri 14 Aug). Create codes PDS100 + GUEST100 variants + PBWTHANKS. Give every channel link its own referral tag (romalist, dripify, podcast…).'},
+   {k:'p1a2',who:['C','R'],txt:'Roma alignment call — THE priority this week',how:'Agree: 1 email to their NW borrower/broker list (w/c 3 Aug), 1 company-page post, PDS stand hands out PDS100. Confirm £5k split: £1.5k codes / £300 rewards / £1k retargeting / £2.2k war chest.'},
+   {k:'p1a3',who:['C','A'],txt:'LinkedIn Event page live',how:'Created on Boardroom Club page. Adam invites first batch of connections (LinkedIn caps invites — spread weekly).'},
+   {k:'p1a4',who:['A'],txt:'Win-back emails begin — 8/day',how:'Hand-typed from Adam’s Gmail to the 93 one-timers, ranked by past spend (list is in the Attendees tab: One-time tier). Plain text, one link max, reference the event they attended, end with a question. NO mail-merge tools.'},
+   {k:'p1a5',who:['C'],txt:'Mailchimp Announcement — Sunday 19 Jul evening',how:'Manchester + JV/M&A topic + "get your structure sorted before the November Budget" + SEB price. This is Send 1 in the Emails tab.'},
+   {k:'p1a6',who:['C'],txt:'monday.com boards prepped',how:'Add "October 2026" event label to TPBW Social Media + Newsletters boards; load the sends from the Emails tab as items with dates.'},
+   {k:'p1a7',who:['C'],txt:'Dripify campaign on',how:'20–25 connection requests/day. Targets: Manchester/NW property investors + everyone engaging with event posts. 2-step sequence: connect note (no pitch) → value message day 3.'}]},
+  {start:'2026-07-20',label:'W/c 20 July',title:'Warm audience first',tasks:[
+   {k:'p1b1',who:['A'],txt:'Win-backs 41–93 — finish by 24 Jul',how:'Keep the daily rhythm. Track replies in a note — repliers get a personal follow-up with the PBWTHANKS code.'},
+   {k:'p1b2',who:['C'],txt:'Didn’t-open resend — Sat 25 Jul',how:'Send 1.2: same body, new subject. Historically lifts total reach ~30%.'},
+   {k:'p1b3',who:['C'],txt:'Social calendar loaded',how:'Adam 4–5 posts/wk; Rod’s channels 2–3/wk posted by Charlotte, offset one day. All copy leads with the Budget/JV angle. Load into TPBW Social Media board.'},
+   {k:'p1b4',who:['A'],txt:'Record podcast episode',how:'Manchester deals + "structure before the Budget". Roma guest segment ties the sponsor in. Clip 4–6 reels.'},
+   {k:'p1b5',who:['C','A'],txt:'Loyalist guest codes out',how:'From the events email to every 3+ event attendee (Attendees tab → Regular + Loyalist tiers): "bring someone new — they get £100 off, you get the VIP lunch." Adam DMs only the top 10 by spend.'}]},
+  {start:'2026-07-27',label:'W/c 27 July',title:'The 90%-open weapon',tasks:[
+   {k:'p1c1',who:['C'],txt:'Engaged-clickers email — Sun 2 Aug',how:'Send 3 to everyone who clicked any Oct mailing. This segment hit 77–92% opens in April. Content angle: "the JV that went wrong" story, not a pitch.'},
+   {k:'p1c2',who:['A'],txt:'WhatsApp post #1 of 2',how:'PIP Manchester + northern groups first. Frame: "we’re bringing the workshop to Manchester" — community news, not a sales blast.'},
+   {k:'p1c3',who:['C'],txt:'Pace check vs 12-by-2-Aug',how:'Pace tab grades it automatically. If BEHIND: Roma email fires this week instead of next.'},
+   {k:'p1c4',who:['C'],txt:'Podcast live + reels rolling',how:'Episode published; reels scheduled across all four social channels via monday board.'}]},
+  {start:'2026-08-03',label:'W/c 3 Aug',title:'Deadline warmup',tasks:[
+   {k:'p1d1',who:['C'],txt:'SEB deadline announcement — Fri 7 Aug',how:'Send 4 to everyone + matching posts on every channel: "price rises Friday 14th." Plain, direct, no cleverness.'},
+   {k:'p1d2',who:['R'],txt:'Roma email lands',how:'Their send, our landing link with romalist tag. Chase them Monday if not scheduled.'},
+   {k:'p1d3',who:['C'],txt:'Dripify follow-up wave',how:'Accepted connections get message 2 mentioning the Friday deadline.'}]},
+  {start:'2026-08-10',label:'W/c 10 Aug',title:'SEB CLOSES FRI 14',tasks:[
+   {k:'p1e1',who:['C'],txt:'48h warning Wed 12 + final hours Fri 14 am',how:'Sends 5 (engaged only) and 6 (everyone). Include real seat count.'},
+   {k:'p1e2',who:['A'],txt:'Countdown posts Thu/Fri',how:'Adam personal angle: "who I’m looking forward to seeing in Manchester." Rod’s channels mirror Saturday.'},
+   {k:'p1e3',who:['C'],txt:'Tier flip + thank-yous',how:'Verify EB price goes live at midnight. Personal thank-you note to every SEB buyer (they’re your referral seeds).'}]}]},
+ {id:'p2',phase:'Phase 2 — Hold pace, PDS, Early Bird',weeks:[
+  {start:'2026-08-17',label:'W/c 17 Aug',title:'Regroup on data',tasks:[
+   {k:'p2a1',who:['C'],txt:'Checkpoint: 24 by 17 Aug',how:'Auto-graded in Pace tab. BEHIND → war chest conversation NOW + check Purchase Log referral tags for what’s actually selling.'},
+   {k:'p2a2',who:['C'],txt:'"Missed it" email — Sun 23 Aug',how:'Send 7 to didn’t-opens: "SEB gone, EB still beats door price."'},
+   {k:'p2a3',who:['C'],txt:'Retargeting go/no-go',how:'£1k Meta warm ads (~£20/day, Sept) needs a pixel on the ticket page + someone to own it. No owner → fold £1k into the code pool. Decide this week, not September.'}]},
+  {start:'2026-08-24',label:'W/c 24 Aug',title:'Content pressure',tasks:[
+   {k:'p2b1',who:['C','A'],txt:'Story week',how:'"JV gone wrong / portfolio bought right" — Adam posts, Rod’s channels mirror next day. Clip best April testimonials as graphics.'},
+   {k:'p2b2',who:['C'],txt:'Budget-angle mailing — Sun 30 Aug',how:'Send 8: "What the November Budget could do to property owners — get your structure sorted first." News-flow will do half the work.'}]},
+  {start:'2026-08-31',label:'W/c 31 Aug',title:'Checkpoint + retargeting live',tasks:[
+   {k:'p2c1',who:['C'],txt:'Checkpoint: 34 by 1 Sep',how:'Auto-graded. This is the last cheap moment to correct course.'},
+   {k:'p2c2',who:['C'],txt:'Retargeting ads live (if greenlit)',how:'Warm audiences only: ticket-page visitors + social engagers. Creative = testimonial + deadline.'}]},
+  {start:'2026-09-07',label:'W/c 7 Sep',title:'PDS week — subtle',tasks:[
+   {k:'p2d1',who:['A'],txt:'Wed 9 Sep: Adam at PDS Old Trafford',how:'Guest, not exhibitor. Conversations only. PDS100 said out loud, no flyers needed from us. Collect names for follow-up.'},
+   {k:'p2d2',who:['R'],txt:'Roma stand pushes PDS100',how:'Cards on their stand + verbal mention. Agreed back in July — confirm the Friday before.'},
+   {k:'p2d3',who:['A'],txt:'Same-evening LinkedIn recap',how:'Tag people met (ask permission in the moment). Best-performing post format after live events.'},
+   {k:'p2d4',who:['A'],txt:'WhatsApp post #2 — FINAL',how:'EB-ends-Friday angle, northern groups. This is the last WhatsApp touch of the cycle.'}]},
+  {start:'2026-09-14',label:'W/c 14 Sep',title:'EB CLOSES FRI 18',tasks:[
+   {k:'p2e1',who:['C'],txt:'EB deadline emails',how:'Send 9 Sun 13 (everyone) + Send 10 Wed 16 (engaged, 48h warning with real seat count).'},
+   {k:'p2e2',who:['A'],txt:'PDS follow-ups',how:'Every PDS conversation gets a DM/email: "code expires Friday." Highest-intent list of the whole cycle.'},
+   {k:'p2e3',who:['C'],txt:'Checkpoint: 42 by 17 Sep',how:'Auto-graded. BEHIND here → everything in Phase 3 goes to engaged-only aggressive.'}]}]},
+ {id:'p3',phase:'Phase 3 — Scarcity + event day',weeks:[
+  {start:'2026-09-21',label:'W/c 21 Sep',title:'Scarcity, honestly',tasks:[
+   {k:'p3a1',who:['C'],txt:'Seats-left email — Sun 20 Sep',how:'Send 11 with REAL numbers ("X of 48"). April’s version: 88.7% open, 53.8% CTR — your best-performing email ever.'},
+   {k:'p3a2',who:['C'],txt:'3-push closer — 22–26 Sep',how:'Send 12, engaged-only, over 5 days: Day 1 Adam’s voice → Day 2 cost-of-getting-it-wrong → Day 3 final seats. Proven January pattern.'},
+   {k:'p3a3',who:['C'],txt:'VIP upsell to GA holders',how:'3 of 4 current sales are VIP — demand is premium. Upgrade email with what VIP actually gets.'}]},
+  {start:'2026-09-28',label:'W/c 28 Sep',title:'Final days + EVENT',tasks:[
+   {k:'p3b1',who:['C'],txt:'Final push Mon 28 + last chance Wed 30',how:'Send 13, everyone, genuine final call. If sold out — send a "sold out, join Jan waitlist" flex instead.'},
+   {k:'p3b2',who:['A','C'],txt:'EVENT DAY 1 OCT: Jan 27 rebook live in the room',how:'Rebook table/QR at lunch AND at close. Most repeat bookings happen at the very next event — the room IS the Jan campaign.'},
+   {k:'p3b3',who:['C'],txt:'Capture testimonials + photos',how:'Video 3–5 attendees at lunch. These are the Jan 27 campaign assets.'}]},
+  {start:'2026-10-05',label:'After',title:'Close the loop',tasks:[
+   {k:'p3c1',who:['C'],txt:'After-email + survey within 48h',how:'April format. Feed quotes into the Jan 27 asset bank.'},
+   {k:'p3c2',who:['C'],txt:'Referral-tag debrief',how:'Purchase Log tab shows exactly what each channel sold. 20 minutes, and the Jan 27 plan writes itself from data.'}]}]}];
+
+// ================= state =================
+const KEY='oct26cc';let state={};
+try{state=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+
+// ================= scroll-velocity marquee =================
+(function(){
+  const track=document.getElementById('mtrack');
+  const words='<span class="solid">MISSION 48</span><span>MANCHESTER</span><span class="solid">1 OCTOBER</span><span>JOINT VENTURES &amp; M&amp;A</span><span class="solid">SEB ENDS 14 AUG</span><span>SELL OUT THE ROOM</span>';
+  track.innerHTML=words+words+words+words;
+  let x=0,vel=0,lastY=window.scrollY;
+  function loop(){
+    const y=window.scrollY;vel+= (Math.abs(y-lastY))*0.15;lastY=y;
+    vel*=0.92;
+    x-=0.8+Math.min(vel,18);
+    const half=track.scrollWidth/2;
+    if(-x>=half)x+=half;
+    track.style.transform=`translateX(${x}px)`;
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+})();
+
+// ================= countdown =================
+const EVENT_T=new Date('2026-10-01T09:30:00+01:00');
+function tickCd(){const ms=EVENT_T-new Date();
+  const d=Math.max(0,Math.floor(ms/864e5)),h=Math.max(0,Math.floor(ms%864e5/36e5));
+  document.getElementById('countdown').innerHTML=[[d,'days'],[h,'hours']].map(([n,l])=>`<div class="cd"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');}
+tickCd();setInterval(tickCd,60000);
+
+// spotlight
+document.addEventListener('mousemove',e=>{const c=e.target.closest('.card');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')});
+
+// ================= plan rendering =================
+function taskHTML(t,extra){
+  return `<div class="task"><label class="row"><input type="checkbox" data-k="${t.k}" ${state[t.k]?'checked':''}><div><div class="txt">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}${extra||''}</div><div class="how">${t.how}</div></div></label></div>`;
+}
+function weekHTML(w,isCurrent,open){
+  const done=w.tasks.filter(t=>state[t.k]).length;
+  return `<details class="week ${isCurrent?'current':''}" ${open?'open':''}><summary><span>${w.label} — ${w.title}${isCurrent?' <span class="badge b-track">NOW</span>':''}</span><span class="wk-when">${done}/${w.tasks.length}${done===w.tasks.length?' ✓':''}</span></summary><div class="items">${w.tasks.map(t=>taskHTML(t)).join('')}</div></details>`;
+}
+function currentWeek(){
+  const now=new Date();
+  let cur=null;
+  PLAN.forEach(p=>p.weeks.forEach(w=>{const s=new Date(w.start);if(s<=now)cur=w}));
+  return cur;
+}
+function renderPlan(){
+  // phases
+  PLAN.forEach(p=>{
+    const cw=currentWeek();
+    document.getElementById('pv-'+p.id).innerHTML=
+      `<h2 style="margin-top:4px">${p.phase}</h2>`+p.weeks.map(w=>weekHTML(w,cw&&w.start===cw.start,cw&&w.start===cw.start)).join('');
+  });
+  // this week
+  const cw=currentWeek();
+  const now=new Date();
+  const allDates=[['Fri 14 Aug','2026-08-14','SUPER EARLY BIRD ENDS'],['Wed 9 Sep','2026-09-09','PDS Old Trafford — Adam attends'],['Fri 18 Sep','2026-09-18','EARLY BIRD ENDS'],['Thu 1 Oct','2026-10-01','EVENT DAY — Jan 27 rebook in the room']];
+  const next=allDates.find(d=>new Date(d[1])>=now);
+  const nextD=next?Math.ceil((new Date(next[1])-now)/864e5):0;
+  let html='';
+  if(next)html+=`<div class="card nextup" style="margin-bottom:12px"><div class="kpi"><div class="label">Next key date — in ${nextD} days</div><div class="value gold">${next[0]}: ${next[2]}</div></div></div>`;
+  if(cw){
+    html+=`<h2 style="margin-top:4px">📍 ${cw.label} — ${cw.title}</h2><div class="sect-sub">Auto-detected from today’s date. Full context in the phase tabs.</div>`+
+      `<div class="card">${cw.tasks.map(t=>taskHTML(t)).join('')}</div>`;
+    // upcoming preview
+    const flat=[];PLAN.forEach(p=>p.weeks.forEach(w=>flat.push(w)));
+    const idx=flat.findIndex(w=>w.start===cw.start);
+    if(idx>=0&&flat[idx+1]){const nw=flat[idx+1];
+      html+=`<h2>Coming up: ${nw.label} — ${nw.title}</h2><div class="card" style="opacity:.75">${nw.tasks.map(t=>`<div class="task"><div class="row"><div style="min-width:18px"></div><div><div class="txt" style="font-weight:600">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}</div></div></div></div>`).join('')}</div>`;}
+  }
+  document.getElementById('pv-now').innerHTML=html;
+  bindChecks();
+  updateProg();
+}
+function bindChecks(){
+  document.querySelectorAll('.task input').forEach(b=>{
+    b.onchange=()=>{state[b.dataset.k]=b.checked;save();renderPlan()};
+  });
+}
+function updateProg(){
+  const all=[];PLAN.forEach(p=>p.weeks.forEach(w=>w.tasks.forEach(t=>all.push(t.k))));
+  const done=all.filter(k=>state[k]).length;
+  document.getElementById('progBar').style.width=(done/all.length*100)+'%';
+  document.getElementById('progTxt').textContent=done+' of '+all.length+' tasks done ('+Math.round(done/all.length*100)+'%)';
+}
+renderPlan();
+
+// plan subtabs
+document.querySelectorAll('.subtab').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.subtab').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.pview').forEach(v=>v.classList.toggle('show',v.id==='pv-'+b.dataset.pv));
+}));
+
+// main tabs
+document.querySelectorAll('.tab[data-v]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.tab[data-v]').forEach(x=>x.classList.toggle('active',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('show',v.id==='v-'+b.dataset.v));
+  if(b.dataset.v==='pace')renderPace();
+  if(b.dataset.v==='events')renderEvents();
+  if(b.dataset.v==='attendees')renderAttendees();
+  if(b.dataset.v==='log')renderLogView();
+}));
+
+// ================= live data =================
+let INCLUDE_EMAILS=false;
+function cumCurve(days){const c=new Array(MAXD+1).fill(0);days.forEach(d=>c[Math.min(Math.max(d,0),MAXD)]++);const cum=new Array(MAXD+1).fill(0);let run=0;for(let d=MAXD;d>=0;d--){run+=c[d];cum[d]=run}return cum}
+
+let E=[],past=[],avgCurve=[],avgFinal=0,minC=[],maxC=[],oct=null;
+let charts={};const mkChart=(id,cfg)=>{if(charts[id])charts[id].destroy();charts[id]=new Chart(document.getElementById(id),cfg)};
+let grids={};const mkGrid=(el,cfg)=>{if(grids[el]){grids[el].updateConfig(cfg).forceRender();return}grids[el]=new gridjs.Grid(cfg);grids[el].render(document.getElementById(el))};
+
+function build(events,orders){
+  const now=Math.floor(Date.now()/1000);
+  const evStart={};events.forEach(e=>evStart[e.id]=e.start_unix);
+  const firstSeen={},attended={};
+  orders.forEach(o=>(o.tickets||[]).forEach(t=>{
+    if(t.status!=='valid')return;
+    const em=t.key||o.buyer_key;if(!em)return;
+    const s=evStart[o.event_id];if(s===undefined)return;
+    if(!(em in firstSeen)||s<firstSeen[em])firstSeen[em]=s;
+    (attended[em]=attended[em]||new Set()).add(o.event_id);
+  }));
+  E=events.map(ev=>{
+    const eo=orders.filter(o=>o.event_id===ev.id&&o.status!=='cancelled');
+    let sold=0,vip=0,rev=0,vipRev=0;const days=[],log=[];const buyers=new Set(),newB=new Set();
+    eo.forEach(o=>{
+      const paid=((o.total_paid||0)-(o.refund_amount||0))/100;rev+=paid;
+      const tix=(o.tickets||[]).filter(t=>t.status==='valid');
+      const isVip=tix.some(t=>(t.description||'').toUpperCase().includes('VIP'));
+      tix.forEach(t=>{sold++;if((t.description||'').toUpperCase().includes('VIP'))vip++});
+      if(isVip)vipRev+=paid;
+      const em=o.buyer_key;
+      if(em&&tix.length){buyers.add(em);if(firstSeen[em]===ev.start_unix)newB.add(em)}
+      const db=Math.max(0,Math.floor((ev.start_unix-o.created_at)/DAY));
+      if(tix.length)days.push(...tix.map(()=>db));
+      const prev=em&&attended[em]?[...attended[em]].filter(id=>evStart[id]<ev.start_unix&&id!==ev.id).length:0;
+      log.push({name:o.buyer_name||'',email:o.buyer_email||'',key:o.buyer_key||'',type:tix.map(t=>t.description).join(', ')||(o.status==='refunded'?'(refunded)':''),qty:tix.length,paid,when:o.created_at,db,ref:o.referral_tag||'',prev,refunded:(o.refund_amount||0)>0||o.status==='refunded'});
+    });
+    log.sort((a,b)=>b.when-a.when);
+    return{id:ev.id,name:ev.name,topic:TOPICS[ev.id]||'',start:ev.start_unix,past:ev.start_unix<now,sold,vip,rev,vipRev,avgT:sold?rev/sold:0,first:days.length?Math.max(...days):null,last:days.length?Math.min(...days):null,newPct:buyers.size?newB.size/buyers.size:0,vipPct:sold?vip/sold:0,log,cum:cumCurve(days),orders:eo};
+  }).sort((a,b)=>a.start-b.start);
+  past=E.filter(e=>e.past&&e.sold>0);
+  avgFinal=past.reduce((s,e)=>s+e.sold,0)/past.length;
+  avgCurve=[];minC=[];maxC=[];
+  for(let d=0;d<=MAXD;d++){const v=past.map(e=>e.cum[d]);avgCurve[d]=v.reduce((a,b)=>a+b,0)/v.length;minC[d]=Math.min(...v);maxC[d]=Math.max(...v)}
+  oct=E.find(e=>e.id===OCT)||E[E.length-1];
+  renderHero();
+}
+
+function renderHero(){
+  const now=Math.floor(Date.now()/1000);
+  const dtg=Math.max(0,Math.floor((oct.start-now)/DAY));
+  const hist=avgCurve[Math.min(dtg,MAXD)];
+  const diff=oct.sold-hist;
+  const cls=diff>=1?'green':diff<=-1?'red':'gold';
+  const word=diff>=1?'AHEAD':diff<=-1?'BEHIND':'ON TRACK';
+  document.getElementById('heroKpis').innerHTML=`
+    <div class="card kpi"><div class="label">Manchester sold</div><div class="value">${oct.sold}<span style="color:#5f5a75;font-size:16px"> / ${CAP}</span></div><div class="note">${oct.vip} VIP (${pct(oct.vipPct)})</div></div>
+    <div class="card kpi"><div class="label">Revenue (paid)</div><div class="value gold">${gbp(oct.rev)}</div><div class="note">${gbp(oct.rev/VAT)} ex-VAT</div></div>
+    <div class="card kpi"><div class="label">Pace vs history</div><div class="value ${cls}">${word}</div><div class="note">${oct.sold} vs ${hist.toFixed(1)} typical at ${dtg}d out</div></div>
+    <div class="card kpi"><div class="label">To sell out</div><div class="value">${CAP-oct.sold}</div><div class="note">avg final = ${avgFinal.toFixed(0)} — mission needs +55%</div></div>`;
+}
+
+function renderPace(){
+  const now=Math.floor(Date.now()/1000);
+  const dtg=Math.max(0,Math.floor((oct.start-now)/DAY));
+  const dIdx=Math.min(dtg,MAXD),hist=avgCurve[dIdx],histPct=avgFinal?hist/avgFinal:0;
+  const proj=histPct>.02?Math.round(oct.sold/histPct):null;
+  document.getElementById('paceKpis').innerHTML=`
+    <div class="card kpi"><div class="label">Days to go</div><div class="value">${dtg}</div><div class="note">${dshort(oct.start)}</div></div>
+    <div class="card kpi"><div class="label">Sold</div><div class="value">${oct.sold}</div><div class="note">${gbp(oct.rev)} paid</div></div>
+    <div class="card kpi"><div class="label">Typical at this point</div><div class="value">${hist.toFixed(1)}</div><div class="note">${pct(histPct)} of an average final</div></div>
+    <div class="card kpi"><div class="label">Projected final</div><div class="value">${proj??'—'}</div><div class="note">at current pace vs history</div></div>`;
+  const labels=[],h=[],lo=[],hi=[],cur=[];
+  for(let d=MAXD;d>=0;d--){labels.push(d);h.push(+avgCurve[d].toFixed(1));lo.push(minC[d]);hi.push(maxC[d]);cur.push(d>=dtg?oct.cum[d]:null)}
+  mkChart('paceChart',{type:'line',data:{labels,datasets:[
+    {label:'Best past',data:hi,borderColor:'transparent',backgroundColor:'rgba(139,92,246,.08)',fill:'+1',pointRadius:0},
+    {label:'Worst past',data:lo,borderColor:'transparent',backgroundColor:'transparent',pointRadius:0},
+    {label:'Historical average',data:h,borderColor:'#6f6a85',borderDash:[6,4],pointRadius:0,tension:.25},
+    {label:'Manchester OCT26',data:cur,borderColor:'#e8b84b',backgroundColor:'rgba(232,184,75,.12)',fill:true,borderWidth:2.5,pointRadius:0,tension:.25}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+      scales:{x:{title:{display:true,text:'Days before event',color:'#8b87a0'},ticks:{maxTicksLimit:13,color:'#8b87a0'},grid:{color:'#1d1730'}},y:{title:{display:true,text:'Cumulative tickets',color:'#8b87a0'},beginAtZero:true,ticks:{color:'#8b87a0'},grid:{color:'#1d1730'}}},
+      plugins:{legend:{position:'top',labels:{color:'#c9c5da',filter:i=>!['Best past','Worst past'].includes(i.text)}}}}});
+  const tb=document.querySelector('#chkTable tbody');tb.innerHTML='';
+  const nowD=new Date();
+  CHECKPOINTS.forEach(([ds,dout,target])=>{
+    const cd=new Date(ds+'T23:59:59');
+    const soldBy=oct.orders.reduce((s,o)=>s+(o.created_at<=cd.getTime()/1000?(o.issued_tickets||[]).filter(t=>t.status==='valid').length:0),0);
+    const passed=nowD>=cd;
+    let badge;
+    if(passed){badge=soldBy>=target?`<span class="badge b-ahead">HIT ${soldBy}</span>`:`<span class="badge b-behind">MISSED ${soldBy}</span>`}
+    else{const dLeft=Math.ceil((cd-nowD)/864e5);badge=`<span class="badge b-wait">in ${dLeft}d · now ${oct.sold}</span>`}
+    tb.insertAdjacentHTML('beforeend',`<tr><td>${new Date(ds).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}</td><td>${dout}</td><td><b>${target}${target===CAP?' — SOLD OUT':''}</b></td><td>~${Math.round(avgCurve[Math.min(dout,MAXD)])}</td><td>${passed?soldBy:'—'}</td><td>${badge}</td></tr>`);
+  });
+}
+
+function renderEvents(){
+  const totRev=E.reduce((s,e)=>s+e.rev,0);
+  document.getElementById('ovKpis').innerHTML=`
+    <div class="card kpi"><div class="label">Workshops run</div><div class="value">${past.length}</div><div class="note">+ ${E.length-past.length} on sale</div></div>
+    <div class="card kpi"><div class="label">Total revenue</div><div class="value gold">${gbp(totRev)}</div><div class="note">${gbp(totRev/VAT)} ex-VAT</div></div>
+    <div class="card kpi"><div class="label">Total tickets</div><div class="value">${E.reduce((s,e)=>s+e.sold,0)}</div></div>
+    <div class="card kpi"><div class="label">Avg tickets / event</div><div class="value">${avgFinal.toFixed(1)}</div></div>
+    <div class="card kpi"><div class="label">Avg revenue / event</div><div class="value">${gbp(past.reduce((s,e)=>s+e.rev,0)/past.length)}</div></div>`;
+  const rows=E.slice().reverse().map(e=>`<tr class="${e.past?'':'future'}"><td>${dshort(e.start)}${e.past?'':' · ON SALE'}</td><td>${e.topic}</td><td>${e.sold}</td><td>${e.vip}</td><td>${gbp(e.rev)}</td><td>${gbp(e.rev/VAT)}</td><td>${gbp(e.vipRev)}</td><td>${gbp(e.avgT)}</td><td>${e.first??'—'}</td><td>${e.last??'—'}</td><td>${pct(e.newPct)}</td><td>${pct(e.vipPct)}</td></tr>`).join('');
+  const a={s:avgFinal,v:past.reduce((s,e)=>s+e.vip,0)/past.length,r:past.reduce((s,e)=>s+e.rev,0)/past.length,vr:past.reduce((s,e)=>s+e.vipRev,0)/past.length,at:past.reduce((s,e)=>s+e.avgT,0)/past.length,f:past.filter(e=>e.first!=null).reduce((s,e)=>s+e.first,0)/past.length,l:past.filter(e=>e.last!=null).reduce((s,e)=>s+e.last,0)/past.length,n:past.reduce((s,e)=>s+e.newPct,0)/past.length,vp:past.reduce((s,e)=>s+e.vipPct,0)/past.length};
+  document.getElementById('ovTableWrap').innerHTML=`<table class="dk"><thead><tr><th>Date</th><th>Topic</th><th>Sold</th><th>VIP</th><th>Revenue</th><th>Ex-VAT</th><th>VIP Rev</th><th>Avg Ticket</th><th>1st Sale</th><th>Last Sale</th><th>New %</th><th>VIP %</th></tr></thead><tbody>${rows}<tr class="avg"><td>AVERAGE</td><td>completed</td><td>${a.s.toFixed(1)}</td><td>${a.v.toFixed(1)}</td><td>${gbp(a.r)}</td><td>${gbp(a.r/VAT)}</td><td>${gbp(a.vr)}</td><td>${gbp(a.at)}</td><td>${a.f.toFixed(0)}</td><td>${a.l.toFixed(0)}</td><td>${pct(a.n)}</td><td>${pct(a.vp)}</td></tr></tbody></table>`;
+  mkChart('revChart',{data:{labels:E.map(e=>dshort(e.start)),datasets:[
+    {type:'bar',label:'Revenue £ (paid)',data:E.map(e=>Math.round(e.rev)),backgroundColor:E.map(e=>e.past?'rgba(232,184,75,.75)':'rgba(232,184,75,.25)'),yAxisID:'y'},
+    {type:'line',label:'Tickets sold',data:E.map(e=>e.sold),borderColor:'#c084fc',pointRadius:3,tension:.25,yAxisID:'y2'}]},
+    options:{responsive:true,maintainAspectRatio:false,
+      scales:{y:{position:'left',ticks:{color:'#8b87a0'},grid:{color:'#1d1730'}},y2:{position:'right',grid:{drawOnChartArea:false},beginAtZero:true,ticks:{color:'#8b87a0'}},x:{ticks:{color:'#8b87a0'},grid:{color:'#1d1730'}}},
+      plugins:{legend:{position:'top',labels:{color:'#c9c5da'}}}}});
+}
+
+function renderAttendees(){
+  const people={};
+  E.forEach(ev=>ev.log.forEach(l=>{
+    const em=l.key;if(!em)return;
+    const p=people[em]=people[em]||{name:l.name,email:l.email,evs:new Set(),spend:0,last:0};
+    if(l.qty>0)p.evs.add(ev.id);
+    p.spend+=l.paid;
+    if(l.when>p.last){p.last=l.when;p.name=l.name}
+  }));
+  const upcoming=new Set(E.filter(e=>!e.past).map(e=>e.id));
+  const rows=Object.values(people).map(p=>{
+    const n=p.evs.size;
+    const tier=n>=5?'Loyalist (5+)':n>=3?'Regular (3-4)':n===2?'Returner (2)':'One-time';
+    const booked=[...p.evs].some(id=>upcoming.has(id))?'YES':'';
+    return[p.name,p.email||'—',n,tier,Math.round(p.spend),booked];
+  }).sort((a,b)=>b[2]-a[2]||b[4]-a[4]);
+  mkGrid('loyalty',{columns:['Name','Email',{name:'Events'},'Loyalty',{name:'Total spend £'},'Booked OCT26?'],data:rows,sort:true,search:true,pagination:{limit:15},style:{table:{'white-space':'nowrap'}}});
+}
+
+function renderLogView(){
+  const sel=document.getElementById('logSelect');
+  if(!sel.options.length){
+    E.slice().reverse().forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=(e.topic?e.topic+' — ':'')+dshort(e.start)+(e.past?'':' (on sale)');sel.appendChild(o)});
+    sel.value=OCT;
+    sel.addEventListener('change',renderLogView);
+  }
+  const e=E.find(x=>x.id===sel.value)||oct;
+  mkGrid('logGrid',{columns:['Bought','Buyer','Email','Ticket(s)',{name:'Qty'},{name:'Paid £'},'Days before','History','Referral'],
+    data:e.log.map(l=>[dt(l.when),l.name+(l.refunded?' ⚠︎ refund':''),l.email||'—',l.type,l.qty,Math.round(l.paid),l.db,
+      gridjs.html(l.prev>0?`<span class="ret-tag">Returning · ${l.prev} prev</span>`:`<span class="new-tag">NEW</span>`),l.ref]),
+    sort:true,search:true,pagination:{limit:25},style:{table:{'white-space':'nowrap'}}});
+}
+
+(async function(){
+  try{
+    const res=await fetch('data.json?t='+Date.now());
+    if(!res.ok)throw new Error('data.json not found — run the "Update dashboard data" workflow once in GitHub Actions.');
+    const data=await res.json();
+    INCLUDE_EMAILS=!!data.include_emails;
+    const events=data.events,orders=data.orders;
+    document.getElementById('updated').textContent='auto-updated from Ticket Tailor · data refreshed '+new Date(data.generated_at).toLocaleString('en-GB');
+    document.getElementById('loading').style.display='none';
+    document.getElementById('app').style.display='block';
+    build(events,orders);
+  }catch(err){
+    document.getElementById('loading').style.display='none';
+    const e=document.getElementById('err');e.style.display='block';
+    e.textContent='Could not load Ticket Tailor data: '+err.message+' — hit Reload to retry.';
+  }
+})();
+</script>
+</body>
+</html>
