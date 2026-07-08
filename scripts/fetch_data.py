@@ -13,7 +13,7 @@ import urllib.request
 from datetime import datetime, timezone
 
 BASE = "https://api.tickettailor.com"
-API_KEY = os.environ.get("TICKET_TAILOR_API_KEY", "")
+API_KEY = os.environ.get("TICKET_TAILOR_API_KEY", "").strip()
 INCLUDE_EMAILS = os.environ.get("INCLUDE_EMAILS", "false").lower() == "true"
 
 if not API_KEY:
@@ -26,9 +26,14 @@ def get(path):
     req = urllib.request.Request(BASE + path, headers={
         "Authorization": f"Basic {AUTH}",
         "Accept": "application/json",
+        "User-Agent": "pbw-command-centre/1.0 (+github-actions)",
     })
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r)
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            return json.load(r)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", errors="replace")[:600]
+        sys.exit(f"Ticket Tailor API returned {e.code} for {path}\nResponse: {body}")
 
 
 def fetch_all(path):
