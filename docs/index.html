@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PBW Command Centre — Oct 2026</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23151022'/%3E%3Crect x='2' y='2' width='60' height='60' rx='11' fill='none' stroke='%23e8b84b' stroke-width='3'/%3E%3Cpath d='M14 46 L26 32 L36 38 L50 18' fill='none' stroke='%23e8b84b' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='18' r='5' fill='%23e8b84b'/%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/theme/mermaid.min.css" rel="stylesheet" integrity="sha384-jZvDSsmGB9oGGT/4l9bHXGoAv1OxvG/cFmSo0dZaSqmBgvQTKDBFAMftlXTmMbNW" crossorigin="anonymous">
@@ -227,7 +228,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
   <div class="card chartbox"><canvas id="paceChart"></canvas></div>
   <h2>Sell-out Checkpoints <span class="accent">· auto-graded from live sales</span></h2>
   <div class="tablewrap"><table class="dk" id="chkTable">
-    <thead><tr><th>Date</th><th>Days out</th><th>Target (sell-out)</th><th>Historic avg</th><th>Actual (live)</th><th>Status</th></tr></thead>
+    <thead><tr><th>Date</th><th>% elapsed</th><th>Target (sell-out)</th><th>Historic avg</th><th>Actual (live)</th><th>Status</th></tr></thead>
     <tbody></tbody>
   </table></div>
   <div class="sect-sub" style="margin-top:10px">Targets = 55% above the historic average curve. BEHIND at any checkpoint → unlock the £2.2k war chest and bring the next email forward.</div>
@@ -485,6 +486,15 @@ function build(events,orders){
   renderHero();
 }
 
+// % of campaign time elapsed: window runs from the previous workshop to this one,
+// so it stays comparable even when the gap between workshops is uneven (Adam, 9 Jul 26)
+function campPct(atUnix){
+  const prevStart=past.length?past[past.length-1].start:oct.start-100*DAY;
+  const span=oct.start-prevStart;
+  if(span<=0)return 100;
+  return Math.min(100,Math.max(0,Math.round((atUnix-prevStart)/span*100)));
+}
+
 function renderHero(){
   const now=Math.floor(Date.now()/1000);
   const dtg=Math.max(0,Math.floor((oct.start-now)/DAY));
@@ -495,7 +505,7 @@ function renderHero(){
   document.getElementById('heroKpis').innerHTML=`
     <div class="card kpi"><div class="label">Manchester sold</div><div class="value">${oct.sold}<span style="color:#5f5a75;font-size:16px"> / ${CAP}</span></div><div class="note">${oct.vip} VIP (${pct(oct.vipPct)})</div></div>
     <div class="card kpi"><div class="label">Revenue (paid)</div><div class="value gold">${gbp(oct.rev)}</div><div class="note">${gbp(oct.rev/VAT)} ex-VAT</div></div>
-    <div class="card kpi"><div class="label">Pace vs history</div><div class="value ${cls}">${word}</div><div class="note">${oct.sold} vs ${hist.toFixed(1)} typical at ${dtg}d out</div></div>
+    <div class="card kpi"><div class="label">Pace vs history</div><div class="value ${cls}">${word}</div><div class="note">${oct.sold} vs ${hist.toFixed(1)} typical at ${campPct(now)}% of campaign</div></div>
     <div class="card kpi"><div class="label">To sell out</div><div class="value">${CAP-oct.sold}</div><div class="note">avg final = ${avgFinal.toFixed(0)} — mission needs +55%</div></div>`;
 }
 
@@ -505,7 +515,7 @@ function renderPace(){
   const dIdx=Math.min(dtg,MAXD),hist=avgCurve[dIdx],histPct=avgFinal?hist/avgFinal:0;
   const proj=histPct>.02?Math.round(oct.sold/histPct):null;
   document.getElementById('paceKpis').innerHTML=`
-    <div class="card kpi"><div class="label">Days to go</div><div class="value">${dtg}</div><div class="note">${dshort(oct.start)}</div></div>
+    <div class="card kpi"><div class="label">Campaign elapsed</div><div class="value">${campPct(now)}%</div><div class="note">${dtg}d to go · ${dshort(oct.start)}</div></div>
     <div class="card kpi"><div class="label">Sold</div><div class="value">${oct.sold}</div><div class="note">${gbp(oct.rev)} paid</div></div>
     <div class="card kpi"><div class="label">Typical at this point</div><div class="value">${hist.toFixed(1)}</div><div class="note">${pct(histPct)} of an average final</div></div>
     <div class="card kpi"><div class="label">Projected final</div><div class="value">${proj??'—'}</div><div class="note">at current pace vs history</div></div>`;
@@ -528,7 +538,7 @@ function renderPace(){
     let badge;
     if(passed){badge=soldBy>=target?`<span class="badge b-ahead">HIT ${soldBy}</span>`:`<span class="badge b-behind">MISSED ${soldBy}</span>`}
     else{const dLeft=Math.ceil((cd-nowD)/864e5);badge=`<span class="badge b-wait">in ${dLeft}d · now ${oct.sold}</span>`}
-    tb.insertAdjacentHTML('beforeend',`<tr><td>${new Date(ds).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}</td><td>${dout}</td><td><b>${target}${target===CAP?' — SOLD OUT':''}</b></td><td>~${Math.round(avgCurve[Math.min(dout,MAXD)])}</td><td>${passed?soldBy:'—'}</td><td>${badge}</td></tr>`);
+    tb.insertAdjacentHTML('beforeend',`<tr><td>${new Date(ds).toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}</td><td>${campPct(cd.getTime()/1000)}%</td><td><b>${target}${target===CAP?' — SOLD OUT':''}</b></td><td>~${Math.round(avgCurve[Math.min(dout,MAXD)])}</td><td>${passed?soldBy:'—'}</td><td>${badge}</td></tr>`);
   });
 }
 
