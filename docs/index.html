@@ -114,6 +114,16 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 </head>
 <body>
 
+<div id="gate" style="position:fixed;inset:0;background:#0a0714;z-index:100;display:flex;align-items:flex-start;justify-content:center">
+  <div class="card" style="margin-top:20vh;width:min(92vw,360px)">
+    <div style="font-weight:800;font-size:18px;color:#fff">PBW Command Centre</div>
+    <div class="sub" style="margin-bottom:12px">Team access only</div>
+    <input id="pwin" type="password" placeholder="Password" autocomplete="current-password" style="width:100%;padding:10px 12px;border:1px solid #2a2440;border-radius:9px;background:#100c1c;color:#fff;font:inherit">
+    <button id="pwbtn" style="margin-top:10px;width:100%;padding:10px;border:none;border-radius:9px;background:linear-gradient(90deg,#6d5bd0,#8b5cf6);color:#fff;font-weight:800;font-size:14px;cursor:pointer">Enter</button>
+    <div id="pwerr" style="display:none;color:#f87171;font-size:12.5px;margin-top:8px"></div>
+  </div>
+</div>
+
 <div class="marquee" id="marquee"><div class="track" id="mtrack"></div></div>
 
 <div class="wrap">
@@ -177,7 +187,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
         <tr><td><b>8 · Budget angle</b></td><td>Everyone</td><td>Sun 30 Aug</td><td>"What the November Budget could do to property owners"</td><td>~36% open</td></tr>
         <tr><td><b>9 · Post-PDS + EB deadline</b></td><td>Everyone</td><td>Sun 13 Sep</td><td>EB ends Fri 18 + PDS momentum</td><td>—</td></tr>
         <tr class="hl"><td><b>10 · EB 48h</b></td><td>Engaged only</td><td>Wed 16 Sep</td><td>"48 hours" + real seats left</td><td>engaged sends: 88%+ open</td></tr>
-        <tr><td><b>11 · Scarcity</b></td><td>Everyone</td><td>Sun 20 Sep</td><td>Real remaining-seats count ("X of 48")</td><td class="gold">88.7% open / 53.8% CTR (Apr)</td></tr>
+        <tr><td><b>11 · Scarcity</b></td><td>Everyone</td><td>Sun 20 Sep</td><td>Real remaining-seats count ("X of 50")</td><td class="gold">88.7% open / 53.8% CTR (Apr)</td></tr>
         <tr><td><b>12 · 3-push closer</b></td><td>Engaged only, Day 1/2/3</td><td>22–26 Sep</td><td>Adam's voice → cost of getting it wrong → final seats</td><td>proven Jan pattern</td></tr>
         <tr><td><b>13 · Last chance</b></td><td>Everyone</td><td>Mon 28 + Wed 30 Sep</td><td>Genuine final call</td><td>—</td></tr>
       </tbody>
@@ -231,7 +241,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
     <thead><tr><th>Date</th><th>% elapsed</th><th>Target (sell-out)</th><th>Historic avg</th><th>Actual (live)</th><th>Status</th></tr></thead>
     <tbody></tbody>
   </table></div>
-  <div class="sect-sub" style="margin-top:10px">Targets = 55% above the historic average curve. BEHIND at any checkpoint → unlock the £2.2k war chest and bring the next email forward.</div>
+  <div class="sect-sub" style="margin-top:10px">Targets = the straight path to the 50-seat sell-out (~62% above the historic average final of 31). BEHIND at any checkpoint → unlock the £2.2k war chest and bring the next email forward.</div>
 </div>
 
 <!-- EVENTS -->
@@ -264,16 +274,14 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 </div>
 
 <script>
-const DAY=86400,MAXD=120,VAT=1.2,CAP=48;
+const DAY=86400,MAXD=120,VAT=1.2,CAP=50;
 const OCT='ev_8397335';
 const TOPICS={ev_3362937:'Planning',ev_3542479:'Due diligence + JV',ev_4147024:'Operating at scale',ev_4409076:'Exits',ev_4733063:'Planning + book keeping',ev_5189838:'Due diligence',ev_5949166:'Joint ventures',ev_6354453:'Operating at scale',ev_6956183:'Planning + book keeping',ev_7526379:'Exits (Manchester)',ev_8115732:'Due diligence',ev_8397335:'Joint ventures & M&A'};
-const CHECKPOINTS=[['2026-08-02',60,12],['2026-08-17',45,24],['2026-09-01',30,34],['2026-09-17',14,42],['2026-10-01',0,48]];
+const CHECKPOINTS=[['2026-08-02',60,12],['2026-08-17',45,25],['2026-09-01',30,35],['2026-09-17',14,44],['2026-10-01',0,50]];
 const gbp=n=>'£'+Math.round(n).toLocaleString('en-GB');
 const pct=n=>(n*100).toFixed(0)+'%';
 const dt=u=>{const d=new Date(u*1000);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
 const dshort=u=>new Date(u*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
-// public site: first name + surname initial only (full details live in Ticket Tailor)
-const maskName=s=>s?String(s).trim().split(/\s+/).map((w,i)=>i===0?w:(w[0]||'').toUpperCase()+'.').join(' '):s;
 
 // ================= PLAN DATA =================
 const PLAN=[
@@ -346,7 +354,7 @@ const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
 // ================= scroll-velocity marquee =================
 (function(){
   const track=document.getElementById('mtrack');
-  const words='<span class="solid">MISSION 48</span><span>MANCHESTER</span><span class="solid">1 OCTOBER</span><span>JOINT VENTURES &amp; M&amp;A</span><span class="solid">SEB ENDS 14 AUG</span><span>SELL OUT THE ROOM</span>';
+  const words='<span class="solid">MISSION 50</span><span>MANCHESTER</span><span class="solid">1 OCTOBER</span><span>JOINT VENTURES &amp; M&amp;A</span><span class="solid">SEB ENDS 14 AUG</span><span>SELL OUT THE ROOM</span>';
   track.innerHTML=words+words+words+words;
   let x=0,vel=0,lastY=window.scrollY;
   function loop(){
@@ -508,7 +516,7 @@ function renderHero(){
     <div class="card kpi"><div class="label">Manchester sold</div><div class="value">${oct.sold}<span style="color:#5f5a75;font-size:16px"> / ${CAP}</span></div><div class="note">${oct.vip} VIP (${pct(oct.vipPct)})</div></div>
     <div class="card kpi"><div class="label">Revenue (paid)</div><div class="value gold">${gbp(oct.rev)}</div><div class="note">${gbp(oct.rev/VAT)} ex-VAT</div></div>
     <div class="card kpi"><div class="label">Pace vs history</div><div class="value ${cls}">${word}</div><div class="note">${oct.sold} vs ${hist.toFixed(1)} typical at ${campPct(now)}% of campaign</div></div>
-    <div class="card kpi"><div class="label">To sell out</div><div class="value">${CAP-oct.sold}</div><div class="note">avg final = ${avgFinal.toFixed(0)} — mission needs +55%</div></div>`;
+    <div class="card kpi"><div class="label">To sell out</div><div class="value">${CAP-oct.sold}</div><div class="note">avg final = ${avgFinal.toFixed(0)} — mission needs +${Math.round((CAP/avgFinal-1)*100)}%</div></div>`;
 }
 
 function renderPace(){
@@ -577,7 +585,7 @@ function renderAttendees(){
     const n=p.evs.size;
     const tier=n>=5?'Loyalist (5+)':n>=3?'Regular (3-4)':n===2?'Returner (2)':'One-time';
     const booked=[...p.evs].some(id=>upcoming.has(id))?'YES':'';
-    return[maskName(p.name),p.email||'—',n,tier,Math.round(p.spend),booked];
+    return[p.name,p.email||'—',n,tier,Math.round(p.spend),booked];
   }).sort((a,b)=>b[2]-a[2]||b[4]-a[4]);
   mkGrid('loyalty',{columns:['Name','Email',{name:'Events'},'Loyalty',{name:'Total spend £'},'Booked OCT26?'],data:rows,sort:true,search:true,pagination:{limit:15},style:{table:{'white-space':'nowrap'}}});
 }
@@ -591,27 +599,53 @@ function renderLogView(){
   }
   const e=E.find(x=>x.id===sel.value)||oct;
   mkGrid('logGrid',{columns:['Bought','Buyer','Email','Ticket(s)',{name:'Qty'},{name:'Paid £'},'Days before','History','Referral'],
-    data:e.log.map(l=>[dt(l.when),maskName(l.name)+(l.refunded?' ⚠︎ refund':''),l.email||'—',l.type,l.qty,Math.round(l.paid),l.db,
+    data:e.log.map(l=>[dt(l.when),l.name+(l.refunded?' ⚠︎ refund':''),l.email||'—',l.type,l.qty,Math.round(l.paid),l.db,
       gridjs.html(l.prev>0?`<span class="ret-tag">Returning · ${l.prev} prev</span>`:`<span class="new-tag">NEW</span>`),l.ref]),
     sort:true,search:true,pagination:{limit:25},style:{table:{'white-space':'nowrap'}}});
 }
 
-(async function(){
+// ============ password gate: data.enc is AES-256-GCM encrypted; key derived from the team password ============
+async function decryptPayload(pw){
+  const res=await fetch('data.enc?t='+Date.now());
+  if(!res.ok)throw new Error('data.enc not found — run the "Update dashboard data" workflow (SITE_PASSWORD secret required).');
+  const raw=Uint8Array.from(atob((await res.text()).trim()),c=>c.charCodeAt(0));
+  const salt=raw.slice(0,16),iv=raw.slice(16,28),ct=raw.slice(28);
+  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+  const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct);
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+function boot(data){
+  INCLUDE_EMAILS=!!data.include_emails;
+  document.getElementById('updated').textContent='auto-updated from Ticket Tailor · data refreshed '+new Date(data.generated_at).toLocaleString('en-GB');
+  document.getElementById('loading').style.display='none';
+  document.getElementById('app').style.display='block';
+  build(data.events,data.orders);
+}
+async function attemptUnlock(pw,silent){
   try{
-    const res=await fetch('data.json?t='+Date.now());
-    if(!res.ok)throw new Error('data.json not found — run the "Update dashboard data" workflow once in GitHub Actions.');
-    const data=await res.json();
-    INCLUDE_EMAILS=!!data.include_emails;
-    const events=data.events,orders=data.orders;
-    document.getElementById('updated').textContent='auto-updated from Ticket Tailor · data refreshed '+new Date(data.generated_at).toLocaleString('en-GB');
-    document.getElementById('loading').style.display='none';
-    document.getElementById('app').style.display='block';
-    build(events,orders);
+    const data=await decryptPayload(pw);
+    localStorage.setItem('oct26pw',pw);
+    document.getElementById('gate').style.display='none';
+    boot(data);
+    return true;
   }catch(err){
-    document.getElementById('loading').style.display='none';
-    const e=document.getElementById('err');e.style.display='block';
-    e.textContent='Could not load Ticket Tailor data: '+err.message+' — hit Reload to retry.';
+    localStorage.removeItem('oct26pw');
+    if(!silent){
+      const e=document.getElementById('pwerr');e.style.display='block';
+      e.textContent=(err&&err.name==='OperationError')?'Wrong password.':('Could not load data: '+err.message);
+    }
+    return false;
   }
+}
+(function(){
+  const btn=document.getElementById('pwbtn'),input=document.getElementById('pwin');
+  const go=()=>{btn.textContent='Checking…';attemptUnlock(input.value,false).finally(()=>{btn.textContent='Enter'})};
+  btn.onclick=go;
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')go()});
+  const saved=localStorage.getItem('oct26pw');
+  if(saved){attemptUnlock(saved,true).then(ok=>{if(!ok)input.focus()})}
+  else input.focus();
 })();
 </script>
 </body>
