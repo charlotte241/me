@@ -49,6 +49,16 @@ def fetch_all(path):
     return out
 
 
+def mask_name(name):
+    """Public site shows first name + surname initial only (full names live in Ticket Tailor)."""
+    if not name:
+        return name
+    parts = str(name).strip().split()
+    if len(parts) <= 1:
+        return str(name).strip()
+    return parts[0] + " " + " ".join((p[0].upper() + ".") for p in parts[1:] if p)
+
+
 def key(email):
     email = (email or "").strip().lower()
     if not email:
@@ -77,7 +87,7 @@ for o in orders:
         "refund_amount": o.get("refund_amount") or 0,
         "status": o.get("status"),
         "referral_tag": o.get("referral_tag"),
-        "buyer_name": buyer.get("name"),
+        "buyer_name": mask_name(buyer.get("name")),
         "buyer_key": key(buyer.get("email")),
         "tickets": [{
             "description": t.get("description"),
