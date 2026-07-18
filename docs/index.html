@@ -166,7 +166,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
     <div class="tablewrap"><table class="dk">
       <thead><tr><th>Send</th><th>Audience segment</th><th>Date</th><th>Angle</th><th>Benchmark</th></tr></thead>
       <tbody>
-        <tr><td><b>1 · Announcement</b></td><td>Everyone (3,000)</td><td>Sun 19 Jul</td><td>Manchester + JV/M&amp;A + "before the Budget" + SEB price</td><td>~26% open</td></tr>
+        <tr><td><b>1 · Announcement</b></td><td>Everyone (~7,000)</td><td>Sun 19 Jul</td><td>Manchester + JV/M&amp;A + "before the Budget" + SEB price</td><td>~26% open</td></tr>
         <tr><td><b>1.2 · Resend</b></td><td>Didn't open #1</td><td>Sat 25 Jul</td><td>New subject line, same body</td><td>~30% open</td></tr>
         <tr><td><b>2 · Past attendee voucher</b></td><td>Past attendees</td><td>Sun 26 Jul</td><td><code>PBWTHANKS</code> £100 + "you know what this room is like"</td><td>33% open / 13% CTR</td></tr>
         <tr><td><b>3 · Engaged clickers</b></td><td>Clicked any Oct mailing</td><td>Sun 2 Aug</td><td>Content: "the JV that went wrong" story</td><td class="gold"><b>77–92% open</b></td></tr>
@@ -187,7 +187,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
   <div class="pview" id="pv-channels">
     <h2 style="margin-top:4px">Channel Playbook <span class="accent">— who does what, and the hard rules</span></h2>
     <div class="grid channels" style="margin-top:10px">
-      <div class="card ch"><div class="name">Mailchimp (3,000)</div><span class="role win">Engine · win-backs + regulars</span><p>Runs the sequence in the Emails tab. Segment religiously — engaged-clicker sends hit <b>77–92% opens</b> vs ~26% blasts. Sunday eve / Monday 7–8am always.</p><div class="rule">Never claim scarcity that isn't literally true.</div></div>
+      <div class="card ch"><div class="name">Mailchimp (~7,000)</div><span class="role win">Engine · win-backs + regulars</span><p>Runs the sequence in the Emails tab. Segment religiously — engaged-clicker sends hit <b>77–92% opens</b> vs ~26% blasts. Sunday eve / Monday 7–8am always.</p><div class="rule">Never claim scarcity that isn't literally true.</div></div>
       <div class="card ch"><div class="name">Adam — Gmail 1:1</div><span class="role win">Win-backs · 93 people</span><p>8 hand-typed/day ranked by past spend, done by 24 Jul. Plain text, one link max, reference the event they attended. No mail-merge tools — that's what Gmail's 2026 rules flag.</p><div class="rule">A reply is worth more than a click — ask a question.</div></div>
       <div class="card ch"><div class="name">Adam — LinkedIn (7k) + Dripify</div><span class="role new">New buyers</span><p>4–5 posts/wk: Budget angle, JV war stories, Manchester. Dripify capped 20–25 requests/day (aggressive settings restrict ~1 in 3 accounts). Targets: NW investors + event-post engagers.</p><div class="rule">No pitch in message 1. Ever.</div></div>
       <div class="card ch"><div class="name">Rod's channels (2k LI + 1k IG)</div><span class="role ret">Amplifier only</span><p>Charlotte posts on his behalf — Adam's calendar offset by one day. Zero actions required from Rod, by design.</p><div class="rule">Nothing in this plan depends on Rod doing anything.</div></div>
@@ -272,6 +272,8 @@ const gbp=n=>'£'+Math.round(n).toLocaleString('en-GB');
 const pct=n=>(n*100).toFixed(0)+'%';
 const dt=u=>{const d=new Date(u*1000);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
 const dshort=u=>new Date(u*1000).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+// public site: first name + surname initial only (full details live in Ticket Tailor)
+const maskName=s=>s?String(s).trim().split(/\s+/).map((w,i)=>i===0?w:(w[0]||'').toUpperCase()+'.').join(' '):s;
 
 // ================= PLAN DATA =================
 const PLAN=[
@@ -327,7 +329,7 @@ const PLAN=[
   {start:'2026-09-21',label:'W/c 21 Sep',title:'Scarcity, honestly',tasks:[
    {k:'p3a1',who:['C'],txt:'Seats-left email — Sun 20 Sep',how:'Send 11 with REAL numbers ("X of 48"). April’s version: 88.7% open, 53.8% CTR — your best-performing email ever.'},
    {k:'p3a2',who:['C'],txt:'3-push closer — 22–26 Sep',how:'Send 12, engaged-only, over 5 days: Day 1 Adam’s voice → Day 2 cost-of-getting-it-wrong → Day 3 final seats. Proven January pattern.'},
-   {k:'p3a3',who:['C'],txt:'VIP upsell to GA holders',how:'3 of 4 current sales are VIP — demand is premium. Upgrade email with what VIP actually gets.'}]},
+   {k:'p3a3',who:['C'],txt:'VIP upsell to GA holders',how:'VIP consistently sells out first — demand is premium (live split in the hero KPIs). Upgrade email with what VIP actually gets.'}]},
   {start:'2026-09-28',label:'W/c 28 Sep',title:'Final days + EVENT',tasks:[
    {k:'p3b1',who:['C'],txt:'Final push Mon 28 + last chance Wed 30',how:'Send 13, everyone, genuine final call. If sold out — send a "sold out, join Jan waitlist" flex instead.'},
    {k:'p3b2',who:['A','C'],txt:'EVENT DAY 1 OCT: Jan 27 rebook live in the room',how:'Rebook table/QR at lunch AND at close. Most repeat bookings happen at the very next event — the room IS the Jan campaign.'},
@@ -533,7 +535,7 @@ function renderPace(){
   const nowD=new Date();
   CHECKPOINTS.forEach(([ds,dout,target])=>{
     const cd=new Date(ds+'T23:59:59');
-    const soldBy=oct.orders.reduce((s,o)=>s+(o.created_at<=cd.getTime()/1000?(o.issued_tickets||[]).filter(t=>t.status==='valid').length:0),0);
+    const soldBy=oct.orders.reduce((s,o)=>s+(o.created_at<=cd.getTime()/1000?(o.tickets||[]).filter(t=>t.status==='valid').length:0),0);
     const passed=nowD>=cd;
     let badge;
     if(passed){badge=soldBy>=target?`<span class="badge b-ahead">HIT ${soldBy}</span>`:`<span class="badge b-behind">MISSED ${soldBy}</span>`}
@@ -575,7 +577,7 @@ function renderAttendees(){
     const n=p.evs.size;
     const tier=n>=5?'Loyalist (5+)':n>=3?'Regular (3-4)':n===2?'Returner (2)':'One-time';
     const booked=[...p.evs].some(id=>upcoming.has(id))?'YES':'';
-    return[p.name,p.email||'—',n,tier,Math.round(p.spend),booked];
+    return[maskName(p.name),p.email||'—',n,tier,Math.round(p.spend),booked];
   }).sort((a,b)=>b[2]-a[2]||b[4]-a[4]);
   mkGrid('loyalty',{columns:['Name','Email',{name:'Events'},'Loyalty',{name:'Total spend £'},'Booked OCT26?'],data:rows,sort:true,search:true,pagination:{limit:15},style:{table:{'white-space':'nowrap'}}});
 }
@@ -589,7 +591,7 @@ function renderLogView(){
   }
   const e=E.find(x=>x.id===sel.value)||oct;
   mkGrid('logGrid',{columns:['Bought','Buyer','Email','Ticket(s)',{name:'Qty'},{name:'Paid £'},'Days before','History','Referral'],
-    data:e.log.map(l=>[dt(l.when),l.name+(l.refunded?' ⚠︎ refund':''),l.email||'—',l.type,l.qty,Math.round(l.paid),l.db,
+    data:e.log.map(l=>[dt(l.when),maskName(l.name)+(l.refunded?' ⚠︎ refund':''),l.email||'—',l.type,l.qty,Math.round(l.paid),l.db,
       gridjs.html(l.prev>0?`<span class="ret-tag">Returning · ${l.prev} prev</span>`:`<span class="new-tag">NEW</span>`),l.ref]),
     sort:true,search:true,pagination:{limit:25},style:{table:{'white-space':'nowrap'}}});
 }
