@@ -1,0 +1,25 @@
+name: Purge plaintext data.json from git history
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install git-filter-repo
+        run: pip install --quiet git-filter-repo
+      - name: Rewrite history without docs/data.json
+        run: git filter-repo --invert-paths --path docs/data.json --force
+      - name: Force-push rewritten main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote add origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git"
+          git push --force origin HEAD:main
