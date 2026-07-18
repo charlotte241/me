@@ -3,6 +3,8 @@
 
 Auth: TICKET_TAILOR_API_KEY env var (Ticket Tailor API key, Basic auth username, blank password).
 Privacy: emails are replaced with anonymous hashes unless INCLUDE_EMAILS=true.
+The whole payload is AES-256-GCM encrypted with SITE_PASSWORD (GitHub secret) -> docs/data.enc.
+No plaintext data.json is published.
 """
 import base64
 import hashlib
@@ -49,16 +51,6 @@ def fetch_all(path):
     return out
 
 
-def mask_name(name):
-    """Public site shows first name + surname initial only (full names live in Ticket Tailor)."""
-    if not name:
-        return name
-    parts = str(name).strip().split()
-    if len(parts) <= 1:
-        return str(name).strip()
-    return parts[0] + " " + " ".join((p[0].upper() + ".") for p in parts[1:] if p)
-
-
 def key(email):
     email = (email or "").strip().lower()
     if not email:
@@ -87,7 +79,7 @@ for o in orders:
         "refund_amount": o.get("refund_amount") or 0,
         "status": o.get("status"),
         "referral_tag": o.get("referral_tag"),
-        "buyer_name": mask_name(buyer.get("name")),
+        "buyer_name": buyer.get("name"),
         "buyer_key": key(buyer.get("email")),
         "tickets": [{
             "description": t.get("description"),
@@ -106,8 +98,25 @@ out = {
     "orders": slim_orders,
 }
 
-os.makedirs("docs", exist_ok=True)
-with open("docs/data.json", "w") as f:
-    json.dump(out, f, separators=(",", ":"))
+# ---- encrypt: AES-256-GCM, key = PBKDF2-HMAC-SHA256(SITE_PASSWORD, salt, 200k iters) ----
+password = os.environ.get("SITE_PASSWORD", "").strip()
+if not password:
+    sys.exit("SITE_PASSWORD is not set — refusing to publish buyer data unencrypted. "
+             "Add it under Settings > Secrets and variables > Actions.")
 
-print(f"Wrote docs/data.json: {len(slim_events)} events, {len(slim_orders)} orders, emails={'ON' if INCLUDE_EMAILS else 'OFF'}")
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+payload = json.dumps(out, separators=(",", ":")).encode()
+salt, nonce = os.urandom(16), os.urandom(12)
+kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=salt, iterations=200000)
+ct = AESGCM(kdf.derive(password.encode())).encrypt(nonce, payload, None)
+
+os.makedirs("docs", exist_ok=True)
+with open("docs/data.enc", "w") as f:
+    f.write(base64.b64encode(salt + nonce + ct).decode())
+if os.path.exists("docs/data.json"):
+    os.remove("docs/data.json")  # never leave a plaintext copy
+
+print(f"Wrote docs/data.enc (encrypted): {len(slim_events)} events, {len(slim_orders)} orders, emails={'ON' if INCLUDE_EMAILS else 'OFF'}")
