@@ -22,16 +22,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install encryption dependency
+        run: pip install --quiet cryptography
       - name: Fetch data from Ticket Tailor
         env:
           TICKET_TAILOR_API_KEY: ${{ secrets.TICKET_TAILOR_API_KEY }}
+          SITE_PASSWORD: ${{ secrets.SITE_PASSWORD }}
           INCLUDE_EMAILS: "false"
         run: python3 scripts/fetch_data.py
       - name: Commit updated data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/data.json
+          git add -A docs
           git diff --cached --quiet || git commit -m "Update dashboard data from Ticket Tailor"
           git push
       # Pushes made with GITHUB_TOKEN don't trigger deploy.yml, so deploy here too
