@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PBW Command Centre — Oct 2026</title>
+<title>PBW Command Centre — Jan 2027</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='13' fill='%23151022'/%3E%3Crect x='2' y='2' width='60' height='60' rx='11' fill='none' stroke='%23e8b84b' stroke-width='3'/%3E%3Cpath d='M14 46 L26 32 L36 38 L50 18' fill='none' stroke='%23e8b84b' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='50' cy='18' r='5' fill='%23e8b84b'/%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" integrity="sha384-iU8HYtnGQ8Cy4zl7gbNMOhsDTTKX02BTXptVP/vqAWIaTfM7isw76iyZCsjL2eVi" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gridjs@5.0.2/dist/gridjs.umd.js" integrity="sha384-/XXDzxe4FsGiAe50i/u9pY/Vy/uX654MHB1xoc1BJNnH1WXHhqHga9g3q5tF4gj7" crossorigin="anonymous"></script>
@@ -72,7 +72,7 @@ h2 .accent{color:#e8b84b}
 .task .how{font-size:12.5px;color:#8b87a0;margin-top:3px}
 .task input:checked~div .how{color:#4a4560}
 .who{font-size:10px;font-weight:700;padding:1px 7px;border-radius:999px;margin-left:5px;white-space:nowrap;display:inline-block}
-.who.A{background:#2b1d4d;color:#c084fc}.who.C{background:#123c31;color:#4ade80}.who.R{background:#3d2c12;color:#e8b84b}
+.who.A{background:#2b1d4d;color:#c084fc}.who.C{background:#123c31;color:#4ade80}.who.R{background:#3d2c12;color:#e8b84b}.who.H{background:#12304a;color:#7ec8f8}
 .due{font-size:10px;font-weight:800;padding:1px 8px;border-radius:999px;background:#3d1420;color:#f87171;margin-left:6px}
 /* channels */
 .channels{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
@@ -130,7 +130,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
   <div>
     <div class="gradient-text">PBW COMMAND CENTRE</div>
-    <div class="sub">Joint Ventures &amp; M&amp;A · Thu 1 October 2026 · Manchester · <span id="updated">connecting to Ticket Tailor…</span></div>
+    <div class="sub">Planning, Systems &amp; Financial Control · Thu 7th January 2027 · Birmingham · <span id="updated">connecting to Ticket Tailor…</span></div>
   </div>
   <div class="countdown" id="countdown"></div>
 </div>
@@ -159,75 +159,72 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
   </div>
   <div class="subtabs" id="planTabs">
     <button class="subtab active" data-pv="now">📍 This Week</button>
-    <button class="subtab" data-pv="p1">Phase 1 · →14 Aug</button>
-    <button class="subtab" data-pv="p2">Phase 2 · →18 Sep</button>
-    <button class="subtab" data-pv="p3">Phase 3 · →1 Oct</button>
+    <button class="subtab" data-pv="p1">Phase 1 · →22nd Nov (SEB)</button>
+    <button class="subtab" data-pv="p2">Phase 2 · →11th Dec (EB)</button>
+    <button class="subtab" data-pv="p3">Phase 3 · →7th Jan</button>
     <button class="subtab" data-pv="emails">✉️ Email Sequence</button>
     <button class="subtab" data-pv="channels">📣 Channels</button>
-    <button class="subtab" data-pv="money">💷 Codes &amp; Budget</button>
+    <button class="subtab" data-pv="money">💷 Codes &amp; Tracking</button>
   </div>
+  <div class="sect-sub" style="margin:-6px 0 12px">Owners: <b class="who C">C</b> Charlotte (account side; agents do most of the work under her) · <b class="who A">A</b> Adam · <b class="who R">R</b> Rod · <b class="who H">H</b> Henry</div>
   <div class="pview show" id="pv-now"></div>
   <div class="pview" id="pv-p1"></div>
   <div class="pview" id="pv-p2"></div>
   <div class="pview" id="pv-p3"></div>
   <div class="pview" id="pv-emails">
-    <h2 style="margin-top:4px">Email Sequence <span class="accent">— the proven pattern, October-dated</span></h2>
-    <div class="sect-sub">Built from your monday.com sequence. Rule: every send lands Sunday evening or Monday 7–8am unless it's a deadline day. Benchmarks = your real April/January results.</div>
+    <h2 style="margin-top:4px">Email Sequence <span class="accent">— the proven pattern, January-dated</span></h2>
+    <div class="sect-sub">Sent from GHL. Rule: every send lands Sunday evening or Monday 7–8am unless it's a deadline day. Benchmarks = your real past-campaign results where the send type matches.</div>
     <div class="tablewrap"><table class="dk">
       <thead><tr><th>Send</th><th>Audience segment</th><th>Date</th><th>Angle</th><th>Benchmark</th></tr></thead>
       <tbody>
-        <tr><td><b>1 · Announcement</b></td><td>Everyone (~7,000)</td><td>Sun 19 Jul</td><td>Manchester + JV/M&amp;A + "before the Budget" + SEB price</td><td>~26% open</td></tr>
-        <tr><td><b>1.2 · Resend</b></td><td>Didn't open #1</td><td>Sat 25 Jul</td><td>New subject line, same body</td><td>~30% open</td></tr>
-        <tr><td><b>2 · Past attendee voucher</b></td><td>Past attendees</td><td>Sun 26 Jul</td><td><code>PBWTHANKS</code> £100 + "you know what this room is like"</td><td>33% open / 13% CTR</td></tr>
-        <tr><td><b>3 · Engaged clickers</b></td><td>Clicked any Oct mailing</td><td>Sun 2 Aug</td><td>Content: "the JV that went wrong" story</td><td class="gold"><b>77–92% open</b></td></tr>
-        <tr class="hl"><td><b>4 · SEB deadline</b></td><td>Everyone</td><td>Fri 7 Aug</td><td>Price rises Fri 14 Aug — plain and direct</td><td>deadline sends spike CTR ~7%</td></tr>
-        <tr class="hl"><td><b>5 · SEB 48h warning</b></td><td>Engaged only</td><td>Wed 12 Aug</td><td>"48 hours" + seat count</td><td>24% open / 7% CTR</td></tr>
-        <tr class="hl"><td><b>6 · SEB final hours</b></td><td>Everyone</td><td>Fri 14 Aug am</td><td>Last call, price flips at midnight</td><td>18% open / 7% CTR</td></tr>
-        <tr><td><b>7 · Missed it</b></td><td>Didn't open 4–6</td><td>Sun 23 Aug</td><td>"You missed SEB — EB still beats door price"</td><td>~40% open (resend pattern)</td></tr>
-        <tr><td><b>8 · Budget angle</b></td><td>Everyone</td><td>Sun 30 Aug</td><td>"What the November Budget could do to property owners"</td><td>~36% open</td></tr>
-        <tr><td><b>9 · Post-PDS + EB deadline</b></td><td>Everyone</td><td>Sun 13 Sep</td><td>EB ends Fri 18 + PDS momentum</td><td>—</td></tr>
-        <tr class="hl"><td><b>10 · EB 48h</b></td><td>Engaged only</td><td>Wed 16 Sep</td><td>"48 hours" + real seats left</td><td>engaged sends: 88%+ open</td></tr>
-        <tr><td><b>11 · Scarcity</b></td><td>Everyone</td><td>Sun 20 Sep</td><td>Real remaining-seats count ("X of 50")</td><td class="gold">88.7% open / 53.8% CTR (Apr)</td></tr>
-        <tr><td><b>12 · 3-push closer</b></td><td>Engaged only, Day 1/2/3</td><td>22–26 Sep</td><td>Adam's voice → cost of getting it wrong → final seats</td><td>proven Jan pattern</td></tr>
-        <tr><td><b>13 · Last chance</b></td><td>Everyone</td><td>Mon 28 + Wed 30 Sep</td><td>Genuine final call</td><td>—</td></tr>
+        <tr><td><b>1 · Announcement</b></td><td>Everyone (GHL, 2 batches)</td><td>w/c 19th Oct</td><td>Birmingham + Planning, Systems &amp; Financial Control + SEB price (£594 GA / £795 VIP)</td><td>~26% open</td></tr>
+        <tr><td><b>2 · Engaged clickers</b></td><td>Clicked a recent mailing</td><td>w/c 2nd Nov</td><td>Story-led, in Adam's voice — not a pitch</td><td class="gold"><b>77–92% open</b></td></tr>
+        <tr><td><b>3 · Budget follow-up</b></td><td>Everyone</td><td>w/c 9th Nov</td><td>What the Budget means for planning and financial control</td><td>~36% open</td></tr>
+        <tr class="hl"><td><b>4 · SEB deadline</b></td><td>Everyone</td><td>Wed 18th Nov</td><td>Price rises after Sun 22nd Nov — plain and direct</td><td>deadline sends spike CTR ~7%</td></tr>
+        <tr class="hl"><td><b>5 · SEB 48h warning</b></td><td>Engaged only</td><td>Fri 20th Nov</td><td>"48 hours" + real seat count</td><td>24% open / 7% CTR</td></tr>
+        <tr class="hl"><td><b>6 · SEB final hours</b></td><td>Everyone</td><td>Sun 22nd Nov</td><td>Last call, price moves at 23:59</td><td>18% open / 7% CTR</td></tr>
+        <tr><td><b>7 · Missed it</b></td><td>Didn't open 4–6</td><td>w/c 23rd Nov</td><td>"You missed SEB — EB still beats full price" (£675 vs £750 GA)</td><td>~40% open (resend pattern)</td></tr>
+        <tr><td><b>8 · VIP upgrade</b></td><td>Booked GA buyers</td><td>w/c 23rd Nov</td><td>Upgrade to VIP — 12 places in total</td><td>—</td></tr>
+        <tr><td><b>9 · Group bookings</b></td><td>Everyone</td><td>w/c 30th Nov</td><td>Bring the team — company and group bookings</td><td>—</td></tr>
+        <tr class="hl"><td><b>10 · EB deadline</b></td><td>Everyone</td><td>Fri 4th Dec</td><td>EB ends Fri 11th Dec</td><td>deadline sends spike CTR ~7%</td></tr>
+        <tr class="hl"><td><b>11 · EB 48h</b></td><td>Engaged only</td><td>Wed 9th Dec</td><td>"48 hours" + real seats left</td><td>engaged sends: 88%+ open</td></tr>
+        <tr class="hl"><td><b>12 · EB final</b></td><td>Everyone</td><td>Fri 11th Dec</td><td>Last call before full price (£750 / £928)</td><td>18% open / 7% CTR</td></tr>
+        <tr><td><b>13 · New-year push</b></td><td>Warm contacts</td><td>Mon 4th–Wed 6th Jan</td><td>Genuine final call — sales close 07:00 on the day</td><td>—</td></tr>
       </tbody>
     </table></div>
-    <div class="sect-sub" style="margin-top:10px">Adam's Gmail win-backs run alongside (8/day, hand-typed, 13–24 Jul) — they are NOT Mailchimp sends and never get a template.</div>
+    <div class="sect-sub" style="margin-top:10px">Personal calls run alongside (Henry assigns callers) — they are not GHL sends and never get a template. No campaign sends between Fri 11th Dec and Mon 4th Jan.</div>
   </div>
   <div class="pview" id="pv-channels">
     <h2 style="margin-top:4px">Channel Playbook <span class="accent">— who does what, and the hard rules</span></h2>
+    <div class="sect-sub">Ticket targets: email 12 · calls 10 · BRC 6 · partners 8 · Dripify 4 · ads + social 4 = <b>44 to go</b> from 6 sold → 50.</div>
     <div class="grid channels" style="margin-top:10px">
-      <div class="card ch"><div class="name">Mailchimp (~7,000)</div><span class="role win">Engine · win-backs + regulars</span><p>Runs the sequence in the Emails tab. Segment religiously — engaged-clicker sends hit <b>77–92% opens</b> vs ~26% blasts. Sunday eve / Monday 7–8am always.</p><div class="rule">Never claim scarcity that isn't literally true.</div></div>
-      <div class="card ch"><div class="name">Adam — Gmail 1:1</div><span class="role win">Win-backs · 93 people</span><p>8 hand-typed/day ranked by past spend, done by 24 Jul. Plain text, one link max, reference the event they attended. No mail-merge tools — that's what Gmail's 2026 rules flag.</p><div class="rule">A reply is worth more than a click — ask a question.</div></div>
-      <div class="card ch"><div class="name">Adam — LinkedIn (7k) + Dripify</div><span class="role new">New buyers</span><p>4–5 posts/wk: Budget angle, JV war stories, Manchester. Dripify capped 20–25 requests/day (aggressive settings restrict ~1 in 3 accounts). Targets: NW investors + event-post engagers.</p><div class="rule">No pitch in message 1. Ever.</div></div>
-      <div class="card ch"><div class="name">Rod's channels (2k LI + 1k IG)</div><span class="role ret">Amplifier only</span><p>Charlotte posts on his behalf — Adam's calendar offset by one day. Zero actions required from Rod, by design.</p><div class="rule">Nothing in this plan depends on Rod doing anything.</div></div>
-      <div class="card ch"><div class="name">Roma Finance (£5k + network)</div><span class="role new">New-buyer engine</span><p>Their NW borrower/broker list is worth more than the money. Ask: one email to their list (w/c 3 Aug), one company post, PDS stand hands out <code>PDS100</code>.</p><div class="rule">Confirm their PDS plans THIS WEEK before their calendar fills.</div></div>
-      <div class="card ch"><div class="name">Propenomix Podcast</div><span class="role new">New buyers · £0</span><p>Manchester + "structure before the Budget" episode late July. Event mention every episode until October. 4–6 reels clipped per episode for all socials.</p><div class="rule">No paid promotion — cold reach doesn't convert (Jan26: 13k views, 0.23%).</div></div>
-      <div class="card ch"><div class="name">Instagram + Facebook (Adam)</div><span class="role ret">Support</span><p>Podcast reels, deadline countdowns, April testimonial quote graphics. Warms the audience; not expected to sell alone.</p></div>
-      <div class="card ch"><div class="name">WhatsApp groups</div><span class="role new">Two shots only</span><p>Post #1 w/c 27 Jul ("we're bringing it to Manchester"), post #2 PDS/EB week. PIP Manchester + northern groups first.</p><div class="rule">Never a third post. These groups are borrowed, not owned.</div></div>
-      <div class="card ch"><div class="name">Boardroom Club LinkedIn (200)</div><span class="role ret">Host</span><p>Owns the LinkedIn Event page, reposts everything, invite batches weekly.</p></div>
+      <div class="card ch"><div class="name">GHL email</div><span class="role win">Engine · target 12</span><p>Runs the sequence in the Emails tab. Segment religiously — engaged-clicker sends hit <b>77–92% opens</b> vs ~26% blasts. Announcement goes in 2 batches.</p><div class="rule">Never claim scarcity that isn't literally true.</div></div>
+      <div class="card ch"><div class="name">Personal calls</div><span class="role win">Warm buyers · target 10</span><p>Past buyers, January pipeline leads, and every Meta lead the same day. Henry assigns callers.</p><div class="rule">A same-day call beats any follow-up email.</div></div>
+      <div class="card ch"><div class="name">Boardroom Club members</div><span class="role ret">Members · target 6</span><p><code>BRC120</code> (£355 off) plus the ask: bring one person. Adam/Rod post it in the BRC group.</p></div>
+      <div class="card ch"><div class="name">Partner networks</div><span class="role new">New buyers · target 8</span><p>Midlands property groups, P&amp;P, WhatsApp groups. Each gets its own code/tag so the Purchase Log shows what each one sold.</p><div class="rule">No code, no post — every network is tracked.</div></div>
+      <div class="card ch"><div class="name">Dripify</div><span class="role new">New buyers · target 4</span><p>Charlotte runs it in Adam's browser. Adam's 1st-degree connections, Midlands first, 15/day Mon–Thu. Tag: <code>dripjan</code>.</p><div class="rule">No pitch in message 1. Ever.</div></div>
+      <div class="card ch"><div class="name">Meta lead-form ads</div><span class="role new">Ads + social · target 4</span><p>Run by Vish (Bee The Web). Every lead is called the same day.</p><div class="rule">A lead not called today is a lead lost.</div></div>
+      <div class="card ch"><div class="name">Social via Metricool</div><span class="role ret">Shares the ads + social target</span><p>Adam IG/FB, Rod IG/FB, BRC LinkedIn page. Henry approves once in Metricool. 3 Sunday Supplement carousels a week.</p><div class="rule">Never Adam's or Rod's personal LinkedIn.</div></div>
     </div>
   </div>
   <div class="pview" id="pv-money">
     <h2 style="margin-top:4px">Codes &amp; Tracking <span class="accent">— no more "untracked"</span></h2>
-    <div class="sect-sub">33 of the last 50 tickets had no source tag. This cycle every route in has a name — the Purchase Log tab shows what each code/tag produced, live.</div>
+    <div class="sect-sub">Every route in has a name — the Purchase Log tab shows what each code/tag produced, live.</div>
     <div class="tablewrap"><table class="dk">
       <thead><tr><th>Code / Tag</th><th>What</th><th>Who gets it</th><th>Expires</th></tr></thead>
       <tbody>
-        <tr><td><code>PDS100</code></td><td>£100 off</td><td>PDS conversations + Roma's stand (9 Sep)</td><td>Fri 18 Sep</td></tr>
-        <tr><td><code>GUEST100</code> per-loyalist variants</td><td>£100 off for a first-timer</td><td>Guests of 3+ event loyalists</td><td>Fri 18 Sep</td></tr>
-        <tr><td><code>PBWTHANKS</code></td><td>£100 off</td><td>Past attendees via win-back emails</td><td>Event day</td></tr>
-        <tr><td>Referral tags</td><td>mailings · sundaysupplement · aldirectflw · allinkedin · romalist · dripify · podcast · event_page_widget</td><td>One per channel link</td><td>—</td></tr>
+        <tr><td><code>BRC120</code></td><td>£355 off</td><td>Boardroom Club members</td><td>—</td></tr>
+        <tr><td><code>EXBRC240</code></td><td>£240 off</td><td>Ex-members</td><td>—</td></tr>
+        <tr><td><code>PBWTHANKS</code></td><td>£100 off</td><td>Past attendees</td><td>—</td></tr>
+        <tr><td><code>Retreat240</code></td><td>£240 off</td><td>Retreat contacts</td><td>—</td></tr>
+        <tr><td>Partner codes</td><td>One per network, with a use limit</td><td>Midlands property groups, P&amp;P, WhatsApp groups</td><td>Fri 11th Dec</td></tr>
+        <tr><td>Referral tags</td><td>octatt · oct26 · sundaysupplement · tpbwwhtspp · dripjan · ghlannounce</td><td>One per channel link</td><td>—</td></tr>
+        <tr><td>Per-post tags</td><td>account + platform + mmdd (e.g. adamig1104)</td><td>Every scheduled post</td><td>—</td></tr>
       </tbody>
     </table></div>
-    <h2>Roma's £5,000</h2>
-    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:10px">
-      <div class="card"><div class="kpi"><div class="label">Code subsidy pool</div><div class="value gold">£1,500</div><div class="note">15 × £100 — PDS100 + guest codes. Zero setup, auto-tracked in Ticket Tailor.</div></div></div>
-      <div class="card"><div class="kpi"><div class="label">Loyalist rewards</div><div class="value gold">£300</div><div class="note">VIP lunch upgrades for loyalists whose guests book.</div></div></div>
-      <div class="card"><div class="kpi"><div class="label">Warm retargeting</div><div class="value gold">£1,000</div><div class="note">Meta ads to site visitors/engagers only, ~£20/day Sept. ONLY if someone owns pixel setup — else fold into codes.</div></div></div>
-      <div class="card nextup"><div class="kpi"><div class="label">War chest — held</div><div class="value">£2,200</div><div class="note">Deployed only if a pace checkpoint shows BEHIND, on whatever the referral tags say is working. Otherwise: profit.</div></div></div>
-    </div>
-    <div class="sub" style="margin-top:14px">Working docs: <a href="https://thesourc3.monday.com/boards/18316240249">TPBW Social Media</a> · <a href="https://thesourc3.monday.com/boards/18242090538">TPBW Newsletters</a> · Event Management v2.xlsx · <button class="reset" onclick="if(confirm('Clear all ticks?')){localStorage.removeItem('oct26cc');location.reload()}">Reset ticks</button></div>
+    <h2>Budget</h2>
+    <div class="card"><div class="kpi"><div class="label">Meta ads</div><div class="value gold">Set by Adam</div><div class="note">Figure to be confirmed by Vish.</div></div></div>
+    <div class="sub" style="margin-top:14px">Working docs: <a href="https://thesourc3.monday.com/boards/18316240249">TPBW Social Media</a> · <a href="https://thesourc3.monday.com/boards/18242090538">TPBW Newsletters</a> · Event Management v2.xlsx · <button class="reset" onclick="if(confirm('Clear all ticks?')){localStorage.removeItem('jan27cc');location.reload()}">Reset ticks</button></div>
   </div>
 </div>
 
@@ -241,7 +238,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
     <thead><tr><th>Date</th><th>% elapsed</th><th>Target (sell-out)</th><th>Historic avg</th><th>Actual (live)</th><th>Status</th></tr></thead>
     <tbody></tbody>
   </table></div>
-  <div class="sect-sub" style="margin-top:10px">Targets = the straight path to the 50-seat sell-out (~62% above the historic average final of 31). BEHIND at any checkpoint → unlock the £2.2k war chest and bring the next email forward.</div>
+  <div class="sect-sub" style="margin-top:10px">Targets = the straight path to the 50-seat sell-out (no workshop has sold 50 before; best 42). BEHIND at any checkpoint → bring the next email forward and push calls.</div>
 </div>
 
 <!-- EVENTS -->
@@ -257,7 +254,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 <!-- ATTENDEES -->
 <div class="view" id="v-attendees">
   <h2 style="margin-top:0">Master Attendee List <span class="accent">· live, every buyer ever</span></h2>
-  <div class="sect-sub">Sort any column, search anyone. Loyalist 5+ · Regular 3–4 · Returner 2. "Booked OCT26" = already in for Manchester.</div>
+  <div class="sect-sub">Sort any column, search anyone. Loyalist 5+ · Regular 3–4 · Returner 2. "Booked JAN27" = already in for Birmingham on 7th January.</div>
   <div id="loyalty"></div>
 </div>
 
@@ -275,9 +272,9 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 
 <script>
 const DAY=86400,MAXD=120,VAT=1.2,CAP=50;
-const OCT='ev_8397335';
-const TOPICS={ev_3362937:'Planning',ev_3542479:'Due diligence + JV',ev_4147024:'Operating at scale',ev_4409076:'Exits',ev_4733063:'Planning + book keeping',ev_5189838:'Due diligence',ev_5949166:'Joint ventures',ev_6354453:'Operating at scale',ev_6956183:'Planning + book keeping',ev_7526379:'Exits (Manchester)',ev_8115732:'Due diligence',ev_8397335:'Joint ventures & M&A'};
-const CHECKPOINTS=[['2026-08-02',60,12],['2026-08-17',45,25],['2026-09-01',30,35],['2026-09-17',14,44],['2026-10-01',0,50]];
+const EVT='ev_8749917';
+const TOPICS={ev_3362937:'Planning',ev_3542479:'Due diligence + JV',ev_4147024:'Operating at scale',ev_4409076:'Exits',ev_4733063:'Planning + book keeping',ev_5189838:'Due diligence',ev_5949166:'Joint ventures',ev_6354453:'Operating at scale',ev_6956183:'Planning + book keeping',ev_7526379:'Exits (Manchester)',ev_8115732:'Due diligence',ev_8397335:'Joint ventures + M&A',ev_8749917:'Planning, systems + financial control'};
+const CHECKPOINTS=[['2026-11-01',67,16],['2026-11-22',46,32],['2026-12-11',27,45],['2027-01-07',0,50]];
 const gbp=n=>'£'+Math.round(n).toLocaleString('en-GB');
 const pct=n=>(n*100).toFixed(0)+'%';
 const dt=u=>{const d=new Date(u*1000);return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'})+' '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})};
@@ -285,76 +282,56 @@ const dshort=u=>new Date(u*1000).toLocaleDateString('en-GB',{day:'numeric',month
 
 // ================= PLAN DATA =================
 const PLAN=[
- {id:'p1',phase:'Phase 1 — Peak buying window',weeks:[
-  {start:'2026-07-13',label:'W/c 13 July',title:'Ignition',tasks:[
-   {k:'p1a1',who:['C'],txt:'Ticket Tailor housekeeping',how:'Verify tier prices & SEB end date (Fri 14 Aug). Create codes PDS100 + GUEST100 variants + PBWTHANKS. Give every channel link its own referral tag (romalist, dripify, podcast…).'},
-   {k:'p1a2',who:['C','R'],txt:'Roma alignment call — THE priority this week',how:'Agree: 1 email to their NW borrower/broker list (w/c 3 Aug), 1 company-page post, PDS stand hands out PDS100. Confirm £5k split: £1.5k codes / £300 rewards / £1k retargeting / £2.2k war chest.'},
-   {k:'p1a3',who:['C','A'],txt:'LinkedIn Event page live',how:'Created on Boardroom Club page. Adam invites first batch of connections (LinkedIn caps invites — spread weekly).'},
-   {k:'p1a4',who:['A'],txt:'Win-back emails begin — 8/day',how:'Hand-typed from Adam’s Gmail to the 93 one-timers, ranked by past spend (list is in the Attendees tab: One-time tier). Plain text, one link max, reference the event they attended, end with a question. NO mail-merge tools.'},
-   {k:'p1a5',who:['C'],txt:'Mailchimp Announcement — Sunday 19 Jul evening',how:'Manchester + JV/M&A topic + "get your structure sorted before the November Budget" + SEB price. This is Send 1 in the Emails tab.'},
-   {k:'p1a6',who:['C'],txt:'monday.com boards prepped',how:'Add "October 2026" event label to TPBW Social Media + Newsletters boards; load the sends from the Emails tab as items with dates.'},
-   {k:'p1a7',who:['C'],txt:'Dripify campaign on',how:'20–25 connection requests/day. Targets: Manchester/NW property investors + everyone engaging with event posts. 2-step sequence: connect note (no pitch) → value message day 3.'}]},
-  {start:'2026-07-20',label:'W/c 20 July',title:'Warm audience first',tasks:[
-   {k:'p1b1',who:['A'],txt:'Win-backs 41–93 — finish by 24 Jul',how:'Keep the daily rhythm. Track replies in a note — repliers get a personal follow-up with the PBWTHANKS code.'},
-   {k:'p1b2',who:['C'],txt:'Didn’t-open resend — Sat 25 Jul',how:'Send 1.2: same body, new subject. Historically lifts total reach ~30%.'},
-   {k:'p1b3',who:['C'],txt:'Social calendar loaded',how:'Adam 4–5 posts/wk; Rod’s channels 2–3/wk posted by Charlotte, offset one day. All copy leads with the Budget/JV angle. Load into TPBW Social Media board.'},
-   {k:'p1b4',who:['A'],txt:'Record podcast episode',how:'Manchester deals + "structure before the Budget". Roma guest segment ties the sponsor in. Clip 4–6 reels.'},
-   {k:'p1b5',who:['C','A'],txt:'Loyalist guest codes out',how:'From the events email to every 3+ event attendee (Attendees tab → Regular + Loyalist tiers): "bring someone new — they get £100 off, you get the VIP lunch." Adam DMs only the top 10 by spend.'}]},
-  {start:'2026-07-27',label:'W/c 27 July',title:'The 90%-open weapon',tasks:[
-   {k:'p1c1',who:['C'],txt:'Engaged-clickers email — Sun 2 Aug',how:'Send 3 to everyone who clicked any Oct mailing. This segment hit 77–92% opens in April. Content angle: "the JV that went wrong" story, not a pitch.'},
-   {k:'p1c2',who:['A'],txt:'WhatsApp post #1 of 2',how:'PIP Manchester + northern groups first. Frame: "we’re bringing the workshop to Manchester" — community news, not a sales blast.'},
-   {k:'p1c3',who:['C'],txt:'Pace check vs 12-by-2-Aug',how:'Pace tab grades it automatically. If BEHIND: Roma email fires this week instead of next.'},
-   {k:'p1c4',who:['C'],txt:'Podcast live + reels rolling',how:'Episode published; reels scheduled across all four social channels via monday board.'}]},
-  {start:'2026-08-03',label:'W/c 3 Aug',title:'Deadline warmup',tasks:[
-   {k:'p1d1',who:['C'],txt:'SEB deadline announcement — Fri 7 Aug',how:'Send 4 to everyone + matching posts on every channel: "price rises Friday 14th." Plain, direct, no cleverness.'},
-   {k:'p1d2',who:['R'],txt:'Roma email lands',how:'Their send, our landing link with romalist tag. Chase them Monday if not scheduled.'},
-   {k:'p1d3',who:['C'],txt:'Dripify follow-up wave',how:'Accepted connections get message 2 mentioning the Friday deadline.'}]},
-  {start:'2026-08-10',label:'W/c 10 Aug',title:'SEB CLOSES FRI 14',tasks:[
-   {k:'p1e1',who:['C'],txt:'48h warning Wed 12 + final hours Fri 14 am',how:'Sends 5 (engaged only) and 6 (everyone). Include real seat count.'},
-   {k:'p1e2',who:['A'],txt:'Countdown posts Thu/Fri',how:'Adam personal angle: "who I’m looking forward to seeing in Manchester." Rod’s channels mirror Saturday.'},
-   {k:'p1e3',who:['C'],txt:'Tier flip + thank-yous',how:'Verify EB price goes live at midnight. Personal thank-you note to every SEB buyer (they’re your referral seeds).'}]}]},
- {id:'p2',phase:'Phase 2 — Hold pace, PDS, Early Bird',weeks:[
-  {start:'2026-08-17',label:'W/c 17 Aug',title:'Regroup on data',tasks:[
-   {k:'p2a1',who:['C'],txt:'Checkpoint: 24 by 17 Aug',how:'Auto-graded in Pace tab. BEHIND → war chest conversation NOW + check Purchase Log referral tags for what’s actually selling.'},
-   {k:'p2a2',who:['C'],txt:'"Missed it" email — Sun 23 Aug',how:'Send 7 to didn’t-opens: "SEB gone, EB still beats door price."'},
-   {k:'p2a3',who:['C'],txt:'Retargeting go/no-go',how:'£1k Meta warm ads (~£20/day, Sept) needs a pixel on the ticket page + someone to own it. No owner → fold £1k into the code pool. Decide this week, not September.'}]},
-  {start:'2026-08-24',label:'W/c 24 Aug',title:'Content pressure',tasks:[
-   {k:'p2b1',who:['C','A'],txt:'Story week',how:'"JV gone wrong / portfolio bought right" — Adam posts, Rod’s channels mirror next day. Clip best April testimonials as graphics.'},
-   {k:'p2b2',who:['C'],txt:'Budget-angle mailing — Sun 30 Aug',how:'Send 8: "What the November Budget could do to property owners — get your structure sorted first." News-flow will do half the work.'}]},
-  {start:'2026-08-31',label:'W/c 31 Aug',title:'Checkpoint + retargeting live',tasks:[
-   {k:'p2c1',who:['C'],txt:'Checkpoint: 34 by 1 Sep',how:'Auto-graded. This is the last cheap moment to correct course.'},
-   {k:'p2c2',who:['C'],txt:'Retargeting ads live (if greenlit)',how:'Warm audiences only: ticket-page visitors + social engagers. Creative = testimonial + deadline.'}]},
-  {start:'2026-09-07',label:'W/c 7 Sep',title:'PDS week — subtle',tasks:[
-   {k:'p2d1',who:['A'],txt:'Wed 9 Sep: Adam at PDS Old Trafford',how:'Guest, not exhibitor. Conversations only. PDS100 said out loud, no flyers needed from us. Collect names for follow-up.'},
-   {k:'p2d2',who:['R'],txt:'Roma stand pushes PDS100',how:'Cards on their stand + verbal mention. Agreed back in July — confirm the Friday before.'},
-   {k:'p2d3',who:['A'],txt:'Same-evening LinkedIn recap',how:'Tag people met (ask permission in the moment). Best-performing post format after live events.'},
-   {k:'p2d4',who:['A'],txt:'WhatsApp post #2 — FINAL',how:'EB-ends-Friday angle, northern groups. This is the last WhatsApp touch of the cycle.'}]},
-  {start:'2026-09-14',label:'W/c 14 Sep',title:'EB CLOSES FRI 18',tasks:[
-   {k:'p2e1',who:['C'],txt:'EB deadline emails',how:'Send 9 Sun 13 (everyone) + Send 10 Wed 16 (engaged, 48h warning with real seat count).'},
-   {k:'p2e2',who:['A'],txt:'PDS follow-ups',how:'Every PDS conversation gets a DM/email: "code expires Friday." Highest-intent list of the whole cycle.'},
-   {k:'p2e3',who:['C'],txt:'Checkpoint: 42 by 17 Sep',how:'Auto-graded. BEHIND here → everything in Phase 3 goes to engaged-only aggressive.'}]}]},
- {id:'p3',phase:'Phase 3 — Scarcity + event day',weeks:[
-  {start:'2026-09-21',label:'W/c 21 Sep',title:'Scarcity, honestly',tasks:[
-   {k:'p3a1',who:['C'],txt:'Seats-left email — Sun 20 Sep',how:'Send 11 with REAL numbers ("X of 48"). April’s version: 88.7% open, 53.8% CTR — your best-performing email ever.'},
-   {k:'p3a2',who:['C'],txt:'3-push closer — 22–26 Sep',how:'Send 12, engaged-only, over 5 days: Day 1 Adam’s voice → Day 2 cost-of-getting-it-wrong → Day 3 final seats. Proven January pattern.'},
-   {k:'p3a3',who:['C'],txt:'VIP upsell to GA holders',how:'VIP consistently sells out first — demand is premium (live split in the hero KPIs). Upgrade email with what VIP actually gets.'}]},
-  {start:'2026-09-28',label:'W/c 28 Sep',title:'Final days + EVENT',tasks:[
-   {k:'p3b1',who:['C'],txt:'Final push Mon 28 + last chance Wed 30',how:'Send 13, everyone, genuine final call. If sold out — send a "sold out, join Jan waitlist" flex instead.'},
-   {k:'p3b2',who:['A','C'],txt:'EVENT DAY 1 OCT: Jan 27 rebook live in the room',how:'Rebook table/QR at lunch AND at close. Most repeat bookings happen at the very next event — the room IS the Jan campaign.'},
-   {k:'p3b3',who:['C'],txt:'Capture testimonials + photos',how:'Video 3–5 attendees at lunch. These are the Jan 27 campaign assets.'}]},
-  {start:'2026-10-05',label:'After',title:'Close the loop',tasks:[
-   {k:'p3c1',who:['C'],txt:'After-email + survey within 48h',how:'April format. Feed quotes into the Jan 27 asset bank.'},
-   {k:'p3c2',who:['C'],txt:'Referral-tag debrief',how:'Purchase Log tab shows exactly what each channel sold. 20 minutes, and the Jan 27 plan writes itself from data.'}]}]}];
+ {id:'p1',phase:'Phase 1 — Launch to Super Early Bird (→22nd Nov)',weeks:[
+  {start:'2026-10-19',label:'W/c 19th Oct',title:'Launch',tasks:[
+   {k:'j1a1',who:['C','A'],txt:'Announcement email built in GHL (draft)',how:'Birmingham + Planning, Systems & Financial Control + SEB price (£594 GA / £795 VIP, ends Sun 22nd Nov). Adam gives the OK, then it goes in 2 batches. Send 1 in the Emails tab, tagged ghlannounce.'},
+   {k:'j1a2',who:['C'],txt:'Dripify January campaign built and launched',how:'Charlotte runs it in Adam’s browser. Adam’s 1st-degree connections, Midlands first, 15/day Mon–Thu. No pitch in message 1. Tag: dripjan.'},
+   {k:'j1a3',who:['C','H'],txt:'Posts loaded to Metricool',how:'Adam IG/FB, Rod IG/FB, BRC LinkedIn page only. Henry approves once in Metricool. 3 Sunday Supplement carousels a week, each with its per-post tag.'},
+   {k:'j1a4',who:['H'],txt:'VIP group limit of 12 in Ticket Tailor — Thu 22nd Oct',how:'Set the VIP ticket group cap to 12 so VIP can never oversell.'},
+   {k:'j1a5',who:['H'],txt:'Call list assigned — Fri 23rd Oct',how:'Past buyers + January pipeline leads split across callers. Every Meta lead gets a call the same day.'},
+   {k:'j1a6',who:['C'],txt:'Meta ads status from Vish',how:'Confirm the lead-form ads are live, the budget figure Adam has set, and that leads reach the callers the same day.'}]},
+  {start:'2026-10-26',label:'W/c 26th Oct',title:'Members + partners',tasks:[
+   {k:'j1b1',who:['A','R'],txt:'BRC members note — BRC120 + bring one person',how:'Adam/Rod post in the BRC group: BRC120 (£355 off) and ask every member to bring one person.'},
+   {k:'j1b2',who:['C'],txt:'Partner networks outreach',how:'Midlands property groups, P&P, WhatsApp groups. Each one gets its own tracked code (use limit, expires Fri 11th Dec) so the Purchase Log shows what each sold.'},
+   {k:'j1b3',who:['H'],txt:'Ticket Tailor set-up — Wed 28th Oct',how:'Reminder emails, checkout questions, invoices with VAT number, partner code expiry (Fri 11th Dec).'}]},
+  {start:'2026-11-02',label:'W/c 2nd Nov',title:'Checkpoint 1',tasks:[
+   {k:'j1c1',who:['C'],txt:'Checkpoint: 16 sold by Sun 1st Nov',how:'Auto-graded in the Pace tab. BEHIND → bring the next email forward and push calls.'},
+   {k:'j1c2',who:['C','A'],txt:'Engaged-clickers email',how:'Story-led, in Adam’s voice, to everyone who clicked a recent mailing. This segment has hit 77–92% opens. Not a pitch.'},
+   {k:'j1c3',who:['A'],txt:'LinkedIn Event invites from the BRC page',how:'Invite in weekly batches (LinkedIn caps invites). BRC page only.'}]},
+  {start:'2026-11-09',label:'W/c 9th Nov',title:'Budget angle',tasks:[
+   {k:'j1d1',who:['C'],txt:'Budget follow-up angle content',how:'What the Budget means for planning, systems and financial control. Email + Metricool posts.'},
+   {k:'j1d2',who:['H'],txt:'Calls to every Meta lead same day (ongoing)',how:'Henry’s callers ring every new lead the day it lands. Runs every week to the event.'}]},
+  {start:'2026-11-16',label:'W/c 16th Nov',title:'SEB CLOSES SUN 22ND',tasks:[
+   {k:'j1e1',who:['C'],txt:'SEB deadline email (everyone) — Wed 18th Nov',how:'Send 4: price rises after Sun 22nd Nov. Plain, direct.'},
+   {k:'j1e2',who:['C'],txt:'SEB 48h (engaged) — Fri 20th Nov',how:'Send 5: "48 hours" + real seat count.'},
+   {k:'j1e3',who:['C'],txt:'SEB final hours — Sun 22nd Nov',how:'Send 6: last call. Price moves to £675 GA / £861 VIP at 23:59.'},
+   {k:'j1e4',who:['C'],txt:'Checkpoint: 32 by Sun 22nd Nov',how:'Auto-graded. BEHIND → Phase 2 goes engaged-only and calls double up.'}]}]},
+ {id:'p2',phase:'Phase 2 — Early Bird (→11th Dec)',weeks:[
+  {start:'2026-11-23',label:'W/c 23rd Nov',title:'Early Bird',tasks:[
+   {k:'j2a1',who:['C'],txt:'"Missed it" email',how:'Send 7: SEB has gone, EB still beats full price (£675 vs £750 GA).'},
+   {k:'j2a2',who:['C'],txt:'VIP upgrade offer to booked GA buyers',how:'Send 8: upgrade to VIP while places last (12 VIP places in total).'}]},
+  {start:'2026-11-30',label:'W/c 30th Nov',title:'Groups + EB deadline',tasks:[
+   {k:'j2b1',who:['C','A'],txt:'Group/company bookings push',how:'Send 9 + posts: bring the team — company and group bookings.'},
+   {k:'j2b2',who:['C'],txt:'EB deadline email — Fri 4th Dec',how:'Send 10: EB ends Fri 11th Dec.'}]},
+  {start:'2026-12-07',label:'W/c 7th Dec',title:'EB CLOSES FRI 11TH',tasks:[
+   {k:'j2c1',who:['C'],txt:'EB 48h (engaged) — Wed 9th Dec',how:'Send 11: "48 hours" + real seats left.'},
+   {k:'j2c2',who:['C'],txt:'EB final — Fri 11th Dec',how:'Send 12: last call. Full price (£750 GA / £928 VIP) from 23:59.'},
+   {k:'j2c3',who:['C'],txt:'Checkpoint: 45 by Fri 11th Dec',how:'Auto-graded in the Pace tab.'},
+   {k:'j2c4',who:['C'],txt:'Selling pause over Christmas',how:'No campaign sends until the new-year push on Mon 4th Jan. The booking link stays live.'}]}]},
+ {id:'p3',phase:'Phase 3 — New-year push + event day (→7th Jan)',weeks:[
+  {start:'2027-01-04',label:'W/c 4th Jan',title:'New-year push + EVENT',tasks:[
+   {k:'j3a1',who:['C','H'],txt:'New-year push — Mon 4th–Wed 6th Jan',how:'Send 13 + personal calls to warm contacts. Sales close at 07:00 on the day.'},
+   {k:'j3a2',who:['A','R'],txt:'EVENT DAY Thu 7th Jan: April 2027 rebook in the room',how:'Checkpoint: 50 sold. Rebook for the April 2027 workshop at lunch and at close.'}]}]}];
 
 // ================= state =================
-const KEY='oct26cc';let state={};
+const KEY='jan27cc';let state={};
 try{state=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
 const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
 
 // ================= scroll-velocity marquee =================
 (function(){
   const track=document.getElementById('mtrack');
-  const words='<span class="solid">MISSION 50</span><span>MANCHESTER</span><span class="solid">1 OCTOBER</span><span>JOINT VENTURES &amp; M&amp;A</span><span class="solid">SEB ENDS 14 AUG</span><span>SELL OUT THE ROOM</span>';
+  const words='<span class="solid">MISSION 50</span><span>BIRMINGHAM</span><span class="solid">7TH JANUARY</span><span>PLANNING, SYSTEMS &amp; FINANCIAL CONTROL</span><span class="solid">SEB ENDS 22ND NOV</span><span>SELL OUT THE ROOM</span>';
   track.innerHTML=words+words+words+words;
   let x=0,vel=0,lastY=window.scrollY;
   function loop(){
@@ -370,7 +347,7 @@ const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
 })();
 
 // ================= countdown =================
-const EVENT_T=new Date('2026-10-01T09:30:00+01:00');
+const EVENT_T=new Date('2027-01-07T09:30:00+00:00');
 function tickCd(){const ms=EVENT_T-new Date();
   const d=Math.max(0,Math.floor(ms/864e5)),h=Math.max(0,Math.floor(ms%864e5/36e5));
   document.getElementById('countdown').innerHTML=[[d,'days'],[h,'hours']].map(([n,l])=>`<div class="cd"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');}
@@ -403,7 +380,7 @@ function renderPlan(){
   // this week
   const cw=currentWeek();
   const now=new Date();
-  const allDates=[['Fri 14 Aug','2026-08-14','SUPER EARLY BIRD ENDS'],['Wed 9 Sep','2026-09-09','PDS Old Trafford — Adam attends'],['Fri 18 Sep','2026-09-18','EARLY BIRD ENDS'],['Thu 1 Oct','2026-10-01','EVENT DAY — Jan 27 rebook in the room']];
+  const allDates=[['Sun 22nd Nov','2026-11-22','SUPER EARLY BIRD ENDS (23:59)'],['Fri 11th Dec','2026-12-11','EARLY BIRD ENDS (23:59)'],['Mon 4th Jan','2027-01-04','NEW-YEAR PUSH STARTS'],['Thu 7th Jan','2027-01-07','EVENT DAY — April 2027 rebook in the room']];
   const next=allDates.find(d=>new Date(d[1])>=now);
   const nextD=next?Math.ceil((new Date(next[1])-now)/864e5):0;
   let html='';
@@ -492,7 +469,7 @@ function build(events,orders){
   avgFinal=past.reduce((s,e)=>s+e.sold,0)/past.length;
   avgCurve=[];minC=[];maxC=[];
   for(let d=0;d<=MAXD;d++){const v=past.map(e=>e.cum[d]);avgCurve[d]=v.reduce((a,b)=>a+b,0)/v.length;minC[d]=Math.min(...v);maxC[d]=Math.max(...v)}
-  oct=E.find(e=>e.id===OCT)||E[E.length-1];
+  oct=E.find(e=>e.id===EVT)||E[E.length-1];
   renderHero();
 }
 
@@ -513,7 +490,7 @@ function renderHero(){
   const cls=diff>=1?'green':diff<=-1?'red':'gold';
   const word=diff>=1?'AHEAD':diff<=-1?'BEHIND':'ON TRACK';
   document.getElementById('heroKpis').innerHTML=`
-    <div class="card kpi"><div class="label">Manchester sold</div><div class="value">${oct.sold}<span style="color:#5f5a75;font-size:16px"> / ${CAP}</span></div><div class="note">${oct.vip} VIP (${pct(oct.vipPct)})</div></div>
+    <div class="card kpi"><div class="label">Birmingham sold</div><div class="value">${oct.sold}<span style="color:#5f5a75;font-size:16px"> / ${CAP}</span></div><div class="note">${oct.vip} VIP (${pct(oct.vipPct)})</div></div>
     <div class="card kpi"><div class="label">Revenue (paid)</div><div class="value gold">${gbp(oct.rev)}</div><div class="note">${gbp(oct.rev/VAT)} ex-VAT</div></div>
     <div class="card kpi"><div class="label">Pace vs history</div><div class="value ${cls}">${word}</div><div class="note">${oct.sold} vs ${hist.toFixed(1)} typical at ${campPct(now)}% of campaign</div></div>
     <div class="card kpi"><div class="label">To sell out</div><div class="value">${CAP-oct.sold}</div><div class="note">avg final = ${avgFinal.toFixed(0)} — mission needs +${Math.round((CAP/avgFinal-1)*100)}%</div></div>`;
@@ -535,7 +512,7 @@ function renderPace(){
     {label:'Best past',data:hi,borderColor:'transparent',backgroundColor:'rgba(139,92,246,.08)',fill:'+1',pointRadius:0},
     {label:'Worst past',data:lo,borderColor:'transparent',backgroundColor:'transparent',pointRadius:0},
     {label:'Historical average',data:h,borderColor:'#6f6a85',borderDash:[6,4],pointRadius:0,tension:.25},
-    {label:'Manchester OCT26',data:cur,borderColor:'#e8b84b',backgroundColor:'rgba(232,184,75,.12)',fill:true,borderWidth:2.5,pointRadius:0,tension:.25}]},
+    {label:'Birmingham JAN27',data:cur,borderColor:'#e8b84b',backgroundColor:'rgba(232,184,75,.12)',fill:true,borderWidth:2.5,pointRadius:0,tension:.25}]},
     options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
       scales:{x:{title:{display:true,text:'Days before event',color:'#8b87a0'},ticks:{maxTicksLimit:13,color:'#8b87a0'},grid:{color:'#1d1730'}},y:{title:{display:true,text:'Cumulative tickets',color:'#8b87a0'},beginAtZero:true,ticks:{color:'#8b87a0'},grid:{color:'#1d1730'}}},
       plugins:{legend:{position:'top',labels:{color:'#c9c5da',filter:i=>!['Best past','Worst past'].includes(i.text)}}}}});
@@ -587,14 +564,14 @@ function renderAttendees(){
     const booked=[...p.evs].some(id=>upcoming.has(id))?'YES':'';
     return[p.name,p.email||'—',n,tier,Math.round(p.spend),booked];
   }).sort((a,b)=>b[2]-a[2]||b[4]-a[4]);
-  mkGrid('loyalty',{columns:['Name','Email',{name:'Events'},'Loyalty',{name:'Total spend £'},'Booked OCT26?'],data:rows,sort:true,search:true,pagination:{limit:15},style:{table:{'white-space':'nowrap'}}});
+  mkGrid('loyalty',{columns:['Name','Email',{name:'Events'},'Loyalty',{name:'Total spend £'},'Booked JAN27?'],data:rows,sort:true,search:true,pagination:{limit:15},style:{table:{'white-space':'nowrap'}}});
 }
 
 function renderLogView(){
   const sel=document.getElementById('logSelect');
   if(!sel.options.length){
     E.slice().reverse().forEach(e=>{const o=document.createElement('option');o.value=e.id;o.textContent=(e.topic?e.topic+' — ':'')+dshort(e.start)+(e.past?'':' (on sale)');sel.appendChild(o)});
-    sel.value=OCT;
+    sel.value=EVT;
     sel.addEventListener('change',renderLogView);
   }
   const e=E.find(x=>x.id===sel.value)||oct;
