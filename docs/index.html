@@ -127,7 +127,6 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 <div class="marquee" id="marquee"><div class="track" id="mtrack"></div></div>
 
 <div class="wrap">
-<div style="margin:14px 0;padding:12px 16px;border:1px solid #e8b84b;border-radius:10px;background:#1a1426;color:#e8e6f0;font-size:15px"><b style="color:#e8b84b">Tick tasks in the shared command centre:</b> <a href="https://claude.ai/artifact/NGcgcy6PUbS3KgYzfxstR2" style="color:#e8b84b">open it here</a>. Ticks there are saved for everyone. This page shows the plan and live sales, read only.</div>
 <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
   <div>
     <div class="gradient-text">PBW COMMAND CENTRE</div>
@@ -225,7 +224,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
     </table></div>
     <h2>Budget</h2>
     <div class="card"><div class="kpi"><div class="label">Meta ads</div><div class="value gold">Set by Adam</div><div class="note">Figure to be confirmed by Vish.</div></div></div>
-    <div class="sub" style="margin-top:14px">Working docs: <a href="https://thesourc3.monday.com/boards/18316240249">TPBW Social Media</a> · <a href="https://thesourc3.monday.com/boards/18242090538">TPBW Newsletters</a> · Event Management v2.xlsx · <button class="reset" onclick="if(confirm('Clear all ticks?')){localStorage.removeItem('jan27cc');location.reload()}">Reset ticks</button></div>
+    <div class="sub" style="margin-top:14px">Working docs: <a href="https://thesourc3.monday.com/boards/18316240249">TPBW Social Media</a> · <a href="https://thesourc3.monday.com/boards/18242090538">TPBW Newsletters</a> · Event Management v2.xlsx · <span id="tickUpd">Ticks updated by the team</span></div>
   </div>
 </div>
 
@@ -325,9 +324,15 @@ const PLAN=[
    {k:'j3a2',who:['A','R'],txt:'EVENT DAY Thu 7th Jan: April 2027 rebook in the room',how:'Checkpoint: 50 sold. Rebook for the April 2027 workshop at lunch and at close.'}]}]}];
 
 // ================= state =================
-const KEY='jan27cc';let state={};
-try{state=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
-const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+// Shared ticks: docs/ticks.json in the repo is the one source. The team updates it; everyone sees the same.
+let state={},tickMeta={};
+const save=()=>{};
+fetch('ticks.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{
+  if(!j||!j.done)return;
+  Object.keys(j.done).forEach(k=>{state[k]=true;tickMeta[k]=j.done[k]});
+  const u=document.getElementById('tickUpd');if(u&&j.updated)u.textContent='Ticks updated by the team: '+new Date(j.updated).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  renderPlan();
+}).catch(()=>{});
 
 // ================= scroll-velocity marquee =================
 (function(){
@@ -359,7 +364,7 @@ document.addEventListener('mousemove',e=>{const c=e.target.closest('.card');if(!
 
 // ================= plan rendering =================
 function taskHTML(t,extra){
-  return `<div class="task"><label class="row"><input type="checkbox" disabled data-k="${t.k}" ${state[t.k]?'checked':''}><div><div class="txt">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}${extra||''}</div><div class="how">${t.how}</div></div></label></div>`;
+  return `<div class="task"><label class="row"><input type="checkbox" disabled data-k="${t.k}" ${state[t.k]?'checked':''}><div><div class="txt">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}${extra||''}${tickMeta[t.k]?`<span style="color:#7fd1a8;font-size:12px;margin-left:8px">✓ ${tickMeta[t.k].by||''} ${tickMeta[t.k].on||''}</span>`:''}</div><div class="how">${t.how}</div></div></label></div>`;
 }
 function weekHTML(w,isCurrent,open){
   const done=w.tasks.filter(t=>state[t.k]).length;
