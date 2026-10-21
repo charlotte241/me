@@ -200,7 +200,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
     <div class="grid channels" style="margin-top:10px">
       <div class="card ch"><div class="name">GHL email</div><span class="role win">Engine · target 12</span><p>Runs the sequence in the Emails tab. Segment religiously — engaged-clicker sends hit <b>77–92% opens</b> vs ~26% blasts. Announcement goes in 2 batches.</p><div class="rule">Never claim scarcity that isn't literally true.</div></div>
       <div class="card ch"><div class="name">Personal calls</div><span class="role win">Warm buyers · target 10</span><p>Past buyers, January pipeline leads, and every Meta lead the same day. Henry assigns callers.</p><div class="rule">A same-day call beats any follow-up email.</div></div>
-      <div class="card ch"><div class="name">Boardroom Club members</div><span class="role ret">Members · target 6</span><p><code>BRC120</code> (£355 off) plus the ask: bring one person. Adam/Rod post it in the BRC group.</p></div>
+      <div class="card ch"><div class="name">Boardroom Club members</div><span class="role ret">Members · target 6</span><p>The members’ code (sent privately) plus the ask: bring one person. Adam/Rod post it in the BRC group.</p></div>
       <div class="card ch"><div class="name">Partner networks</div><span class="role new">New buyers · target 8</span><p>Midlands property groups, P&amp;P, WhatsApp groups. Each gets its own code/tag so the Purchase Log shows what each one sold.</p><div class="rule">No code, no post — every network is tracked.</div></div>
       <div class="card ch"><div class="name">Dripify</div><span class="role new">New buyers · target 4</span><p>Charlotte runs it in Adam's browser. Adam's 1st-degree connections, Midlands first, 15/day Mon–Thu. Tag: <code>dripjan</code>.</p><div class="rule">No pitch in message 1. Ever.</div></div>
       <div class="card ch"><div class="name">Meta lead-form ads</div><span class="role new">Ads + social · target 4</span><p>Run by Vish (Bee The Web). Every lead is called the same day.</p><div class="rule">A lead not called today is a lead lost.</div></div>
@@ -213,10 +213,10 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
     <div class="tablewrap"><table class="dk">
       <thead><tr><th>Code / Tag</th><th>What</th><th>Who gets it</th><th>Expires</th></tr></thead>
       <tbody>
-        <tr><td><code>BRC120</code></td><td>£355 off</td><td>Boardroom Club members</td><td>—</td></tr>
-        <tr><td><code>EXBRC240</code></td><td>£240 off</td><td>Ex-members</td><td>—</td></tr>
-        <tr><td><code>PBWTHANKS</code></td><td>£100 off</td><td>Past attendees</td><td>—</td></tr>
-        <tr><td><code>Retreat240</code></td><td>£240 off</td><td>Retreat contacts</td><td>—</td></tr>
+        <tr><td>Members’ code</td><td>Sent privately</td><td>Boardroom Club members</td><td>—</td></tr>
+        <tr><td>Ex-members’ code</td><td>Sent privately</td><td>Ex-members</td><td>—</td></tr>
+        <tr><td>Past attendees’ code</td><td>Sent privately</td><td>Past attendees</td><td>—</td></tr>
+        <tr><td>Retreat code</td><td>Sent privately</td><td>Retreat contacts</td><td>—</td></tr>
         <tr><td>Partner codes</td><td>One per network, with a use limit</td><td>Midlands property groups, P&amp;P, WhatsApp groups</td><td>Fri 11th Dec</td></tr>
         <tr><td>Referral tags</td><td>octatt · oct26 · sundaysupplement · tpbwwhtspp · dripjan · ghlannounce</td><td>One per channel link</td><td>—</td></tr>
         <tr><td>Per-post tags</td><td>account + platform + mmdd (e.g. adamig1104)</td><td>Every scheduled post</td><td>—</td></tr>
@@ -291,7 +291,7 @@ const PLAN=[
    {k:'j1a5',who:['H'],txt:'Call list assigned — Fri 23rd Oct',how:'Past buyers + January pipeline leads split across callers. Every Meta lead gets a call the same day.'},
    {k:'j1a6',who:['C'],txt:'Meta ads status from Vish',how:'Confirm the lead-form ads are live, the budget figure Adam has set, and that leads reach the callers the same day.'}]},
   {start:'2026-10-26',label:'W/c 26th Oct',title:'Members + partners',tasks:[
-   {k:'j1b1',who:['A','R'],txt:'BRC members note — BRC120 + bring one person',how:'Adam/Rod post in the BRC group: BRC120 (£355 off) and ask every member to bring one person.'},
+   {k:'j1b1',who:['A','R'],txt:'BRC members note — members’ code + bring one person',how:'Adam/Rod post in the BRC group: the members’ code and ask every member to bring one person.'},
    {k:'j1b2',who:['C'],txt:'Partner networks outreach',how:'Midlands property groups, P&P, WhatsApp groups. Each one gets its own tracked code (use limit, expires Fri 11th Dec) so the Purchase Log shows what each sold.'},
    {k:'j1b3',who:['H'],txt:'Ticket Tailor set-up — Wed 28th Oct',how:'Reminder emails, checkout questions, invoices with VAT number, partner code expiry (Fri 11th Dec).'}]},
   {start:'2026-11-02',label:'W/c 2nd Nov',title:'Checkpoint 1',tasks:[
@@ -362,6 +362,25 @@ tickCd();setInterval(tickCd,60000);
 // spotlight
 document.addEventListener('mousemove',e=>{const c=e.target.closest('.card');if(!c)return;const r=c.getBoundingClientRect();c.style.setProperty('--mx',(e.clientX-r.left)+'px');c.style.setProperty('--my',(e.clientY-r.top)+'px')});
 
+// ================= done so far (confirmed work, newest first) =================
+const DONE=[
+ ['21st Oct','Command centre updated for January','Plan, live sales and pace checkpoints for Birmingham. Ticks now show the same for everyone.'],
+ ['20th Oct','Announcement email built in GHL','Birmingham, the topic and Super Early Bird prices. Waiting for Adam’s OK, then it goes in 2 batches.'],
+ ['20th Oct','Sell-out plan to 50 written','Weekly steps from now to 7th January, with ticket targets per channel and 4 checkpoints.'],
+ ['20th Oct','LinkedIn outreach campaign written','Message sequence for Adam’s 1st-degree connections, Midlands first. Ready to launch.'],
+ ['15th Oct','New Meta ad creatives reviewed','Vish sent the new ads; feedback sent back.'],
+ ['12th Oct','October leads moved into the January pipeline','15 leads who didn’t book October: 6 spoken to and interested, 9 never reached. Call notes carried over.'],
+ ['9th Oct','Two-week plan sent to Adam and Rod',''],
+ ['7th Oct','Meta ads set up for January','Lead-form campaign kept, traffic campaign cut. Ticket Tailor tracking moved to Vish’s ad account.'],
+ ['7th Oct','2027 dates published with waitlists','London 22nd April, Birmingham 1st July, London 7th October. Agendas added; waitlist only until each launch.'],
+ ['7th Oct','October attendees followed up',''],
+ ['3rd Oct','GHL contacts cleaned','Ticket Tailor buyers imported and checked.'],
+ ['2nd Oct','January prices set in Ticket Tailor','Super Early Bird £594 GA / £795 VIP to 22nd Nov · Early Bird £675 / £861 to 11th Dec · then £750 / £928.']];
+function doneHTML(){
+  return '<h2 style="margin-top:4px">✅ Done so far</h2><div class="sect-sub">Completed work for Birmingham, newest first.</div><div class="card" style="margin-bottom:14px">'+
+  DONE.map(d=>'<div class="task"><div class="row"><div style="min-width:74px;color:#7fd1a8;font-size:12px;font-weight:700;padding-top:2px">'+d[0]+'</div><div><div class="txt">'+d[1]+'</div>'+(d[2]?'<div class="how">'+d[2]+'</div>':'')+'</div></div></div>').join('')+'</div>';
+}
+
 // ================= plan rendering =================
 function taskHTML(t,extra){
   return `<div class="task"><label class="row"><input type="checkbox" disabled data-k="${t.k}" ${state[t.k]?'checked':''}><div><div class="txt">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}${extra||''}${tickMeta[t.k]?`<span style="color:#7fd1a8;font-size:12px;margin-left:8px">✓ ${tickMeta[t.k].by||''} ${tickMeta[t.k].on||''}</span>`:''}</div><div class="how">${t.how}</div></div></label></div>`;
@@ -389,7 +408,7 @@ function renderPlan(){
   const allDates=[['Sun 22nd Nov','2026-11-22','SUPER EARLY BIRD ENDS (23:59)'],['Fri 11th Dec','2026-12-11','EARLY BIRD ENDS (23:59)'],['Mon 4th Jan','2027-01-04','NEW-YEAR PUSH STARTS'],['Thu 7th Jan','2027-01-07','EVENT DAY — April 2027 rebook in the room']];
   const next=allDates.find(d=>new Date(d[1])>=now);
   const nextD=next?Math.ceil((new Date(next[1])-now)/864e5):0;
-  let html='';
+  let html=doneHTML();
   if(next)html+=`<div class="card nextup" style="margin-bottom:12px"><div class="kpi"><div class="label">Next key date — in ${nextD} days</div><div class="value gold">${next[0]}: ${next[2]}</div></div></div>`;
   if(cw){
     html+=`<h2 style="margin-top:4px">📍 ${cw.label} — ${cw.title}</h2><div class="sect-sub">Auto-detected from today’s date. Full context in the phase tabs.</div>`+
