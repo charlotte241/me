@@ -127,6 +127,7 @@ select{font:inherit;padding:6px 10px;border:1px solid #2a2440;border-radius:8px;
 <div class="marquee" id="marquee"><div class="track" id="mtrack"></div></div>
 
 <div class="wrap">
+<div style="margin:14px 0;padding:12px 16px;border:1px solid #e8b84b;border-radius:10px;background:#1a1426;color:#e8e6f0;font-size:15px"><b style="color:#e8b84b">Tick tasks in the shared command centre:</b> <a href="https://claude.ai/artifact/NGcgcy6PUbS3KgYzfxstR2" style="color:#e8b84b">open it here</a>. Ticks there are saved for everyone. This page shows the plan and live sales, read only.</div>
 <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
   <div>
     <div class="gradient-text">PBW COMMAND CENTRE</div>
@@ -358,7 +359,7 @@ document.addEventListener('mousemove',e=>{const c=e.target.closest('.card');if(!
 
 // ================= plan rendering =================
 function taskHTML(t,extra){
-  return `<div class="task"><label class="row"><input type="checkbox" data-k="${t.k}" ${state[t.k]?'checked':''}><div><div class="txt">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}${extra||''}</div><div class="how">${t.how}</div></div></label></div>`;
+  return `<div class="task"><label class="row"><input type="checkbox" disabled data-k="${t.k}" ${state[t.k]?'checked':''}><div><div class="txt">${t.txt}${t.who.map(w=>`<b class="who ${w}">${w}</b>`).join('')}${extra||''}</div><div class="how">${t.how}</div></div></label></div>`;
 }
 function weekHTML(w,isCurrent,open){
   const done=w.tasks.filter(t=>state[t.k]).length;
